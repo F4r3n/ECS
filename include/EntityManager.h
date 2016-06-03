@@ -5,11 +5,12 @@ class EntityManager {
     public:
         EntityManager();
         ~EntityManager();
-        Entity& createEntity();
+        Entity* createEntity();
+        std::vector<Entity*>& getEntities();
     private:
         static int ids;
 
-        std::vector<Entity> entities;
+        std::vector<Entity*> entities;
 
 };
 

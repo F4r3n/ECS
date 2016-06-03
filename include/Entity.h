@@ -4,6 +4,8 @@
 #include <vector>
 #include <iostream>
 #include <typeinfo>
+#include <memory>
+
 class Entity {
     public:
         Entity();
@@ -12,20 +14,20 @@ class Entity {
         ~Entity();
 
         template <typename T>
-            void addComponent(T *component) {
+            void addComponent(std::shared_ptr<T> component) {
                 components.push_back(component);
             }
 
         template <typename T>
-            T* getComponent() {
-                for(Component *c : components) {
-                    if(dynamic_cast<T*>(c)) return dynamic_cast<T*>(c);
+            std::shared_ptr<T> getComponent() {
+                for(std::shared_ptr<Component> c : components) {
+                    if(std::dynamic_pointer_cast<T>(c)) return std::dynamic_pointer_cast<T>(c);
                 }
                 return nullptr;
             }
     private:
         int id;
-        std::vector<Component*> components;
+        std::vector<std::shared_ptr<Component>> components;
 };
 
 

@@ -6,9 +6,13 @@ EntityManager::EntityManager() {}
 
 EntityManager::~EntityManager() {}
 
-Entity& EntityManager::createEntity() {
-    Entity e(ids);
+Entity* EntityManager::createEntity() {
+    Entity *e = new Entity(ids);
     entities.push_back(e);
     ids++;
-    return entities.back();
+    return e;
+}
+
+std::vector<Entity*>& EntityManager::getEntities() {
+    return entities;
 }
