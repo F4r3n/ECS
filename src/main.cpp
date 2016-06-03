@@ -43,8 +43,8 @@ int main() {
     p->x = 5;
     p->y = 6;
     std::cout << p->name << std::endl;
-    e->addComponent<Position>(p);
-    e->addComponent<Data>(std::make_shared<Data>(Data()));
+    e->addComponent(p);
+    e->addComponent<Data>();
     std::shared_ptr<Position> a = e->getComponent<Position>();
     std::cout << a->name << " " << a->x << " " << a->y << std::endl;
     Movement m;

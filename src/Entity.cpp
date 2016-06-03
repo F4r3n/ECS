@@ -8,4 +8,8 @@ int Entity::getId() {
     return id;
 }
 
+void Entity::addComponent(std::shared_ptr<Component> c) {
+    components.push_back(c);
+}
+
 Entity::~Entity() {}

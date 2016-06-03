@@ -13,15 +13,18 @@ class Entity {
         int getId();
         ~Entity();
 
+        void addComponent(std::shared_ptr<Component> component);
+           
         template <typename T>
-            void addComponent(std::shared_ptr<T> component) {
-                components.push_back(component);
+            void addComponent() {
+                components.push_back(std::make_shared<T>());
             }
 
         template <typename T>
             std::shared_ptr<T> getComponent() {
                 for(std::shared_ptr<Component> c : components) {
-                    if(std::dynamic_pointer_cast<T>(c)) return std::dynamic_pointer_cast<T>(c);
+                    std::shared_ptr<T> t = std::dynamic_pointer_cast<T>(c);
+                    if(t) return t;
                 }
                 return nullptr;
             }
