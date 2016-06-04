@@ -6,17 +6,6 @@
 #include <typeinfo>
 #include <memory>
 
-class Entity {
-    public:
-        Entity();
-        Entity(int id);
-        int getId();
-        ~Entity();
-
-    private:
-        int id;
-        std::vector<std::shared_ptr<Component>> components;
-};
-
+typedef size_t Entity;
 
 #endif

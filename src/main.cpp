@@ -36,16 +36,26 @@ class Movement : public System{
 int main() {
     EntityManager manager;
     ComponentManager compo;
-    Entity *e = manager.createEntity();
-    std::shared_ptr<Position> p = std::make_shared<Position>(Position(e->getId()));
+    Entity e = manager.createEntity();
+    Entity e2 = manager.createEntity();
+    std::cout << e << " " << e2 << std::endl;
+    manager.destroyEntity(e2);
+    //manager.refresh();
+    for(Entity e_alive : manager.getEntities())
+        std::cout << "Alive "<< e_alive << std::endl; 
+    e2 = manager.createEntity();
+    std::cout << e << " " << e2 << std::endl;
+
+
+    std::shared_ptr<Position> p = std::make_shared<Position>(Position(e));
     p->x = 5;
     p->y = 6;
     compo.addComponent<Position>(p);
     compo.addComponent<Position>(p);
-    std::shared_ptr<Position> a = compo.getComponent<Position>(e->getId());
+    std::shared_ptr<Position> a = compo.getComponent<Position>(e);
     Movement m;
     m.update(0, compo);
-    a = compo.getComponent<Position>(e->getId());
+    a = compo.getComponent<Position>(e);
     std::cout << " " << a->x << " " << a->y << std::endl;
 
 
