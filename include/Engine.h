@@ -2,11 +2,11 @@
 #define ENGINE_H
 #include <vector>
 #include "System.h"
-#include "EntityManager.h"
+#include "ComponentManager.h"
 class Engine {
     Engine();
     ~Engine();
-    void update(float dt, EntityManager &em);
+    void update(float dt, ComponentManager &em);
 
 private:
     std::vector<System*> systems;

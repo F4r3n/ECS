@@ -1,10 +1,10 @@
 #include <iostream>
 #include "EntityManager.h"
 #include "System.h"
+#include "ComponentManager.h"
 class Position : public Component {
     public:
-        Position() {
-           name = "yop"; 
+        Position(int id):Component(id) {
         }
         int x;
         int y;
@@ -12,8 +12,8 @@ class Position : public Component {
 
 class Data : public Component {
     public:
-        Data() {
-           name = "yop2"; 
+        Data(){}
+        Data(int id): Component(id) {
         }
         int x;
         int y;
@@ -22,13 +22,10 @@ class Data : public Component {
 class Movement : public System{
     public:
         Movement() {}
-        void update(float dt, EntityManager &em) {
-           for(Entity *e : em.getEntities()) {
-               std::cout << em.getEntities().size() << std::endl;
-               std::shared_ptr<Position> p = e->getComponent<Position>();
-               std::cout << p << std::endl;
+        void update(float dt, ComponentManager &compo) {
+           for(std::shared_ptr<Component> c : compo.getComponents<Position>()) {
+               std::shared_ptr<Position> p = std::dynamic_pointer_cast<Position>(c);
                 if(p) {
-                    std::cout << "++" << std::endl;
                     p->x++;
                 }
            }
@@ -38,19 +35,18 @@ class Movement : public System{
 
 int main() {
     EntityManager manager;
+    ComponentManager compo;
     Entity *e = manager.createEntity();
-    std::shared_ptr<Position> p = std::make_shared<Position>(Position());
+    std::shared_ptr<Position> p = std::make_shared<Position>(Position(e->getId()));
     p->x = 5;
     p->y = 6;
-    std::cout << p->name << std::endl;
-    e->addComponent(p);
-    e->addComponent<Data>();
-    std::shared_ptr<Position> a = e->getComponent<Position>();
-    std::cout << a->name << " " << a->x << " " << a->y << std::endl;
+    compo.addComponent<Position>(p);
+    compo.addComponent<Position>(p);
+    std::shared_ptr<Position> a = compo.getComponent<Position>(e->getId());
     Movement m;
-    m.update(0, manager);
-    a = e->getComponent<Position>();
-    std::cout << a->name << " " << a->x << " " << a->y << std::endl;
+    m.update(0, compo);
+    a = compo.getComponent<Position>(e->getId());
+    std::cout << " " << a->x << " " << a->y << std::endl;
 
 
     return 0;
