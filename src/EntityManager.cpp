@@ -8,6 +8,9 @@ EntityManager::EntityManager() {
         free_id[i] = free_id.size() - i - 1;
     }
 }
+bool EntityManager::isExists(Entity id) {
+    return (id < entities_alive.size() && entities_alive[id] != -1);
+}
 
 void EntityManager::destroyEntity(size_t id) {
     entities_killed.push_back(id);
@@ -32,7 +35,7 @@ Entity EntityManager::createEntity() {
 std::vector<Entity> EntityManager::getEntities() {
     std::vector<Entity> temp;
     for(Entity e : entities_alive)
-        if(e != -1) temp.push_back(e);
+        if(isExists(e)) temp.push_back(e);
 
     return temp;
 }

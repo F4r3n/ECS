@@ -12,6 +12,7 @@ class EntityManager {
         void destroyEntity(size_t id);
         std::vector<Entity> getEntities();
         void refresh();
+        inline bool isExists(Entity id);
     private:
         static int ids;
 
