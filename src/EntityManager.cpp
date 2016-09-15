@@ -1,5 +1,6 @@
 #include "EntityManager.h"
 #include "Entity.h"
+#include <cassert>
 int EntityManager::ids = 0;
 
 EntityManager EntityManager::em;
@@ -39,27 +40,54 @@ EntityManager::~EntityManager()
 {
 }
 
-std::shared_ptr<Entity> EntityManager::createEntity()
+pEntity EntityManager::createEntity()
 {
     entities_alive.push_back(std::make_shared<Entity>(free_id.back()));
     free_id.pop_back();
-    std::shared_ptr<Entity> e = entities_alive.back();
-    
+    pEntity e = entities_alive.back();
+
     return e;
 }
 
-std::vector<std::shared_ptr<Entity> > EntityManager::getEntities()
+std::vector<pEntity> EntityManager::getEntities()
 {
-    std::vector<std::shared_ptr<Entity> > temp;
-    for(std::shared_ptr<Entity> e : entities_alive)
+    std::vector<pEntity> temp;
+    for(pEntity e : entities_alive)
         if(isExists(e->ID))
             temp.push_back(e);
 
     return temp;
 }
+std::vector<size_t> EntityManager::getEntitiesAlive()
+{
+    std::vector<size_t> temp;
+    for(pEntity e : entities_alive)
+        if(isExists(e->ID))
+            temp.push_back(e->ID);
 
-size_t EntityManager::getID(Entity *e) {
-    return e->ID;
+    return temp;
 }
 
+bool EntityManager::hasComponent(std::shared_ptr<Entity> e, std::vector<std::string> &compo) {
+    if(entitiesComponents[e->ID]) {
+        for(std::string c : compo) {
+            if(!entitiesComponents[e->ID]->has(c)) return false;
+        }
+        return true;
+    }
+    return false;
+}
 
+void EntityManager::deleteEntity(Entity* e)
+{
+    assert(e);
+    destroyEntity(e->ID);
+    if(entitiesComponents[e->ID]) {
+        entitiesComponents[e->ID].reset();
+    }
+}
+
+size_t EntityManager::getID(Entity* e)
+{
+    return e->ID;
+}

@@ -19,13 +19,18 @@ class ComponentManager {
                 if(components.find(T::id()) == components.end()) return nullptr;
                 return std::dynamic_pointer_cast<T>(components[T::id()]);
             }
-
+   
 
         template <typename T>
             bool addComponent(std::shared_ptr<Component<T>> c) {
              
               components[T::id()] = c;
               return true;
+            }
+            
+            bool has(std::string value) {
+                if(components.find(value) != components.end() ) return true;
+                return false;
             }
 
     private:

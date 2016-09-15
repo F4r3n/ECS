@@ -13,3 +13,7 @@ Entity::~Entity() {
 }
 
 
+void Entity::destroy() {
+    EntityManager::get().deleteEntity(this);
+}
+

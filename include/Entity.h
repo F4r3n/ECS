@@ -22,6 +22,12 @@ public:
         EntityManager::get().addComponent<T>(this, c);
     }
 
+    template <typename T> std::shared_ptr<T> get()
+    {
+        return EntityManager::get().get<T>(this);
+    }
+    
+    void destroy();
 private:
 };
 
