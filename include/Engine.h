@@ -9,7 +9,7 @@ class Engine {
     void update(float dt, ComponentManager &em);
 
 private:
-    std::vector<System*> systems;
+    //std::vector<System*> systems;
 
 };
 

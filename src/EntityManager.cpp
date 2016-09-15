@@ -1,41 +1,61 @@
 #include "EntityManager.h"
+#include "Entity.h"
 int EntityManager::ids = 0;
 
-
-EntityManager::EntityManager() {
+EntityManager EntityManager::em;
+EntityManager::EntityManager()
+{
     free_id.resize(POOL_SIZE);
     for(size_t i = 0; i < free_id.size(); ++i) {
         free_id[i] = free_id.size() - i - 1;
     }
 }
-bool EntityManager::isExists(Entity id) {
-    return (id < entities_alive.size() && entities_alive[id] != -1);
+
+EntityManager& EntityManager::get()
+{
+    return em;
 }
 
-void EntityManager::destroyEntity(size_t id) {
+bool EntityManager::isExists(size_t id)
+{
+    return ((id < entities_alive.size()) && (entities_alive[id]->ID != -1));
+}
+
+void EntityManager::destroyEntity(size_t id)
+{
     entities_killed.push_back(id);
-    entities_alive[id] = -1;
+    entities_alive[id]->ID = -1;
 }
 
-void EntityManager::refresh() {
+void EntityManager::refresh()
+{
     for(int i : entities_killed)
         free_id.push_back(i);
 
     entities_killed.clear();
 }
 
-EntityManager::~EntityManager() {}
-
-Entity EntityManager::createEntity() {
-    entities_alive.push_back(Entity(free_id.back()));
-    free_id.pop_back();
-    return entities_alive.back();
+EntityManager::~EntityManager()
+{
 }
 
-std::vector<Entity> EntityManager::getEntities() {
-    std::vector<Entity> temp;
-    for(Entity e : entities_alive)
-        if(isExists(e)) temp.push_back(e);
+std::shared_ptr<Entity> EntityManager::createEntity()
+{
+    entities_alive.push_back(std::make_shared<Entity>(free_id.back()));
+    free_id.pop_back();
+    std::shared_ptr<Entity> e = entities_alive.back();
+    
+    return e;
+}
+
+std::vector<std::shared_ptr<Entity> > EntityManager::getEntities()
+{
+    std::vector<std::shared_ptr<Entity> > temp;
+    for(std::shared_ptr<Entity> e : entities_alive)
+        if(isExists(e->ID))
+            temp.push_back(e);
 
     return temp;
 }
+
+

@@ -17,17 +17,13 @@ class Component : public BaseComponent {
     public:
     	typedef ComponentHandle<T> Handle;
         Component() {}
-        Component(int entityId) {
-        	this->entityId = entityId;
-        }
 
-        static int id() {
-        	return reinterpret_cast<int>(typeid( T ).name());
+        static std::string id() {
+        	return typeid( T ).name();
         }
 
 
         virtual ~Component() {}
-        int entityId = -1;
         friend class ComponentManager;
     private:
     	

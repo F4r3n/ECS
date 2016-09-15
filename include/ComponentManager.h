@@ -4,7 +4,7 @@
 #include "Component.h"
 #include <vector>
 #include <memory>
-#include <map>
+#include <unordered_map>
 #include <typeinfo>
 #include <array>
 #include <iostream>
@@ -15,7 +15,7 @@ class ComponentManager {
         ComponentManager();
 
         template <typename T>
-            std::shared_ptr<T> getComponent(int entityId) {
+            std::shared_ptr<T> getComponent() {
                 if(components.find(T::id()) == components.end()) return nullptr;
                 return std::dynamic_pointer_cast<T>(components[T::id()]);
             }
@@ -30,10 +30,8 @@ class ComponentManager {
 
     private:
 
-        std::map<size_t, std::shared_ptr<BaseComponent> > components; 
-        std::map<std::string, int> IDComponents;
+        std::unordered_map<std::string, std::shared_ptr<BaseComponent> > components; 
 
-        int id = 0;
 
 };
 
