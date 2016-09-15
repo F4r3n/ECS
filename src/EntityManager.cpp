@@ -58,4 +58,8 @@ std::vector<std::shared_ptr<Entity> > EntityManager::getEntities()
     return temp;
 }
 
+size_t EntityManager::getID(Entity *e) {
+    return e->ID;
+}
+
 

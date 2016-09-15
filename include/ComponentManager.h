@@ -8,7 +8,7 @@
 #include <typeinfo>
 #include <array>
 #include <iostream>
-#define MAX_COMPONENTS 1000
+#define MAX_COMPONENTS 100
 
 class ComponentManager {
     public:
@@ -23,7 +23,7 @@ class ComponentManager {
 
         template <typename T>
             bool addComponent(std::shared_ptr<Component<T>> c) {
-              if(components.find(T::id()) !=  components.end()) return false;
+             
               components[T::id()] = c;
               return true;
             }

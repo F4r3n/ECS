@@ -17,14 +17,28 @@ public:
     void refresh();
     inline bool isExists(size_t id);
     static EntityManager& get();
-    
-    //template <typename T>
-    //void addComponent(std::shared_ptr<Entity> e, std::shared_ptr<Component<T>> c);
-    std::array<std::shared_ptr<ComponentManager>, POOL_SIZE>& getEntitiesComponents() {
+
+    template <typename T> void addComponent(size_t ID, std::shared_ptr<Component<T> > c)
+    {
+        if(entitiesComponents[ID] != nullptr) {
+            entitiesComponents[ID]->addComponent<T>(c);
+        } else {
+            entitiesComponents[ID] = std::make_shared<ComponentManager>();
+            entitiesComponents[ID]->addComponent<T>(c);
+        }
+    }
+    template <typename T> void addComponent(Entity* e, std::shared_ptr<Component<T> > c)
+    {
+        addComponent<T>(getID(e), c);
+    }
+
+    std::array<std::shared_ptr<ComponentManager>, POOL_SIZE>& getEntitiesComponents()
+    {
         return entitiesComponents;
     }
 
 private:
+    size_t getID(Entity* e);
     static int ids;
 
     std::array<std::shared_ptr<Entity>, POOL_SIZE> entities;

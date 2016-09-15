@@ -19,10 +19,7 @@ public:
 
     template <typename T> void addComponent(std::shared_ptr<Component<T> > c)
     {
-        auto entitiesComponents = EntityManager::get().getEntitiesComponents();
-        if(entitiesComponents[ID] != nullptr) {
-            entitiesComponents[ID]->addComponent<T>(c);
-        }
+        EntityManager::get().addComponent<T>(this, c);
     }
 
 private:

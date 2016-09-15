@@ -56,7 +56,7 @@ int main() {
     std::shared_ptr<Data> d = std::make_shared<Data>(Data());
     p->x = 5;
     p->y = 6;
-    
+    std::cout << typeid(p2).name() << std::endl;
     //EntityManager::get().addComponent<Position>(e, p);
     e->addComponent<Position>(p);
     //std::cout << "test1 " << compo.addComponent<Position>(p)<<std::endl;
