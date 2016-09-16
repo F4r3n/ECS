@@ -14,7 +14,7 @@ public:
     {
     }
 
-    bool addSystem(std::shared_ptr<System> system)
+    void addSystem(std::shared_ptr<System> system)
     {
         systems.push_back(system);
     }

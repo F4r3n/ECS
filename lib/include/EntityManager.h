@@ -3,7 +3,7 @@
 #include <array>
 #include "ComponentManager.h"
 
-#define POOL_SIZE 10000
+#define POOL_SIZE 1000000
 
 class Entity;
 typedef std::shared_ptr<Entity> pEntity;
