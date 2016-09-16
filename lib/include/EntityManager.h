@@ -47,7 +47,8 @@ public:
 
     void deleteEntity(Entity* e);
     std::vector<size_t> getEntitiesAlive();
-    bool hasComponent(std::shared_ptr<Entity> e, std::vector<std::string> &compo);
+    bool hasComponents(std::shared_ptr<Entity> e, std::vector<std::string>& compo);
+    bool hasComponents(std::shared_ptr<Entity> e, std::bitset<MAX_COMPONENTS>& bits);
 
 private:
     size_t getID(Entity* e);

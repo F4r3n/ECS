@@ -40,7 +40,7 @@ public:
     }
     void update(float dt, std::shared_ptr<Entity> e)
     {
-        //std::cout << e->ID << std::endl;
+        std::cout << e->ID << std::endl;
     }
     ~Movement()
     {
@@ -57,13 +57,13 @@ int main()
     std::shared_ptr<Entity> e2 = EntityManager::get().createEntity();
     std::cout << e->ID << std::endl;
     std::cout << e2->ID << std::endl;
-    auto start = std::chrono::system_clock::now();
-    for(int i = 0; i < 10000; ++i) {
-        EntityManager::get().createEntity();
-    }
-    auto end = std::chrono::system_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-    std::cout << "Time " << elapsed.count() << '\n';
+    //auto start = std::chrono::system_clock::now();
+    //for(int i = 0; i < 10000; ++i) {
+    //    EntityManager::get().createEntity();
+    //}
+    //auto end = std::chrono::system_clock::now();
+    //auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+    //std::cout << "Time " << elapsed.count() << '\n';
     e2->destroy();
 
     SystemManager systems;
@@ -82,7 +82,7 @@ int main()
     p->y = 6;
     // EntityManager::get().addComponent<Position>(e, p);
     e->addComponent<Position>(p);
-    e2->addComponent<Position>(p2);
+    //e2->addComponent<Position>(p2);
     p = e->get<Position>();
     std::cout << p->x << " " << p->y << std::endl;
     systems.update(0.16, EntityManager::get());

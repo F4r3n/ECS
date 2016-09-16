@@ -3,7 +3,7 @@
 #include <memory>
 #include <typeinfo>
 #include <cassert>
-
+#include "EntityManager.h"
 class SystemManager
 {
 public:

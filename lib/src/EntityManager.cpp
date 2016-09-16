@@ -68,7 +68,7 @@ std::vector<size_t> EntityManager::getEntitiesAlive()
     return temp;
 }
 
-bool EntityManager::hasComponent(std::shared_ptr<Entity> e, std::vector<std::string> &compo) {
+bool EntityManager::hasComponents(std::shared_ptr<Entity> e, std::vector<std::string> &compo) {
     if(entitiesComponents[e->ID]) {
         for(std::string c : compo) {
             if(!entitiesComponents[e->ID]->has(c)) return false;
@@ -77,6 +77,10 @@ bool EntityManager::hasComponent(std::shared_ptr<Entity> e, std::vector<std::str
     }
     return false;
 }
+
+ bool EntityManager::hasComponents(std::shared_ptr<Entity> e, std::bitset<MAX_COMPONENTS> &bits) {
+        if(entitiesComponents[e->ID]) return entitiesComponents[e->ID]->has(bits);
+    }
 
 void EntityManager::deleteEntity(Entity* e)
 {

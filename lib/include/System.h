@@ -22,14 +22,14 @@ public:
     friend class SystemManager;
     template <typename T> void addComponent()
     {
-        componentsNeeded.push_back(T::id());
+        componentsNeeded.push_back(&typeid(T));
     }
-    std::vector<std::string> getComponentsNeeded() const {
+    std::vector<const std::type_info*> getComponentsNeeded() const {
         return componentsNeeded;
     }
 
 private:
-    std::vector<std::string> componentsNeeded;
+    std::vector<const std::type_info*> componentsNeeded;
 };
 
 #endif
