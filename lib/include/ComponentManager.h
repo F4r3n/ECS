@@ -29,7 +29,7 @@ public:
     {
         bits.set(ComponentTypeManager::registerComponent(typeid(T)), 1);
         components[T::id()].reset(c);
-        std::cout <<"Component "<< dynamic_cast<T*>(components[T::id()].get()) << std::endl;
+        //std::cout <<"Component "<< dynamic_cast<T*>(components[T::id()].get()) << std::endl;
 
         return dynamic_cast<T*>(components[T::id()].get());
     }

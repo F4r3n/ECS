@@ -23,6 +23,7 @@ public:
 
     void update(float dt, EntityManager& em);
     void init(EntityManager& em);
+    //void call_back(Entity *e);
 
 private:
     std::vector<std::shared_ptr<System> > systems;

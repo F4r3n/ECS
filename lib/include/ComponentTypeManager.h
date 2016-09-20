@@ -4,6 +4,7 @@
 #include "ComponentType.h"
 #include <bitset>
 #include <vector>
+#include <iostream>
 class ComponentTypeManager {
 public:
   static int registerComponent(const std::type_info &info) {
@@ -18,6 +19,12 @@ public:
   static void getBitSets(std::bitset<size> &bits, const std::vector<const std::type_info*> infos) {
       for(auto info : infos) {
           bits.set(registered[info]->id, 1);
+      }
+  }
+  
+  static void clear() {
+      for(auto r : registered) {
+          delete r.second;
       }
   }
 static std::unordered_map<const std::type_info*, ComponentType*> registered;  

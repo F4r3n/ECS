@@ -2,11 +2,10 @@
 #define ENTITY_MANAGER_H
 #include <array>
 #include "ComponentManager.h"
-
 #define POOL_SIZE 1000000
 
 class Entity;
-typedef std::shared_ptr<Entity> pEntity;
+typedef std::unique_ptr<Entity> pEntity;
 
 class EntityManager
 {
@@ -15,9 +14,10 @@ public:
     static EntityManager& get();
     ~EntityManager();
     
-    pEntity createEntity();
+    Entity* createEntity();
     void destroyEntity(size_t id);
-    std::vector<pEntity> getEntities();
+    void getEntities(std::function<void(Entity*)> func);
+    void getEntitiesWithComponents(std::function<void(Entity*)> func, std::bitset<MAX_COMPONENTS>& bits);
     void refresh();
     inline bool isExists(size_t id);
    
@@ -51,8 +51,8 @@ public:
 
     void deleteEntity(Entity* e);
     std::vector<size_t> getEntitiesAlive();
-    bool hasComponents(std::shared_ptr<Entity> e, std::vector<std::string>& compo);
-    bool hasComponents(std::shared_ptr<Entity> e, std::bitset<MAX_COMPONENTS>& bits);
+    bool hasComponents(Entity* e, std::vector<std::string>& compo);
+    bool hasComponents(Entity* e, std::bitset<MAX_COMPONENTS>& bits);
 
 private:
     size_t getID(Entity* e);

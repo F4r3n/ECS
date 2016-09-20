@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include "ComponentTypeManager.h"
 class ComponentManager;
 class Entity;
 class EntityManager;
@@ -17,12 +18,13 @@ public:
     {
     }
 
-    virtual void update(float dt, std::shared_ptr<Entity> e) = 0;
-    virtual void init(std::shared_ptr<Entity> e) = 0;
+    virtual void update(float dt, Entity* e) = 0;
+    virtual void init(Entity* e) = 0;
     virtual void over() = 0;
     friend class SystemManager;
     template <typename T> void addComponent()
     {
+        ComponentTypeManager::registerComponent(typeid(T));
         componentsNeeded.push_back(&typeid(T));
     }
     std::vector<const std::type_info*> getComponentsNeeded() const {
