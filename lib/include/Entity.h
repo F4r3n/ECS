@@ -17,12 +17,12 @@ public:
     ~Entity();
     size_t ID;
 
-    template <typename T> void addComponent(std::shared_ptr<Component<T> > c)
+    template <typename T> T* addComponent(Component<T> *c = new T())
     {
-        EntityManager::get().addComponent<T>(this, c);
+       return EntityManager::get().addComponent<T>(this, c);
     }
 
-    template <typename T> std::shared_ptr<T> get()
+    template <typename T> T* get()
     {
         return EntityManager::get().get<T>(this);
     }

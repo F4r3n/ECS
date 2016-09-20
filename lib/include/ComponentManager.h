@@ -14,20 +14,24 @@
 class ComponentManager
 {
 public:
-    ComponentManager();
+    ComponentManager() {}
+    ~ComponentManager() {}
 
-    template <typename T> std::shared_ptr<T> getComponent()
+    template <typename T> T* getComponent()
     {
-        if(components.find(T::id()) == components.end())
+        if(components.find(T::id()) == components.end()) {
             return nullptr;
-        return std::dynamic_pointer_cast<T>(components[T::id()]);
+        }
+        return dynamic_cast<T*>(components[T::id()].get());
     }
 
-    template <typename T> bool addComponent(std::shared_ptr<Component<T> > c)
+    template <typename T> T* addComponent(Component<T> *c)
     {
         bits.set(ComponentTypeManager::registerComponent(typeid(T)), 1);
-        components[T::id()] = c;
-        return true;
+        components[T::id()].reset(c);
+        std::cout <<"Component "<< dynamic_cast<T*>(components[T::id()].get()) << std::endl;
+
+        return dynamic_cast<T*>(components[T::id()].get());
     }
 
     bool has(std::string value)
@@ -38,12 +42,12 @@ public:
     }
     
     bool has(std::bitset<MAX_COMPONENTS> &compo) {
-        return (compo ^ bits).none();
+        return ((bits & compo)  == compo);
     } 
 
 private:
     std::bitset<MAX_COMPONENTS> bits;
-    std::unordered_map<std::string, std::shared_ptr<BaseComponent> > components;
+    std::unordered_map<std::string, std::unique_ptr<BaseComponent> > components;
 };
 
 #endif

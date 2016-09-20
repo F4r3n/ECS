@@ -1,9 +1,9 @@
 #include "EntityManager.h"
 #include "Entity.h"
 #include <cassert>
-int EntityManager::ids = 0;
 
 EntityManager EntityManager::em;
+
 EntityManager::EntityManager()
 {
     free_id.resize(POOL_SIZE);
@@ -15,6 +15,10 @@ EntityManager::EntityManager()
 EntityManager& EntityManager::get()
 {
     return em;
+}
+
+EntityManager::~EntityManager()
+{
 }
 
 bool EntityManager::isExists(size_t id)
@@ -36,9 +40,7 @@ void EntityManager::refresh()
     entities_killed.clear();
 }
 
-EntityManager::~EntityManager()
-{
-}
+
 
 pEntity EntityManager::createEntity()
 {
@@ -58,6 +60,7 @@ std::vector<pEntity> EntityManager::getEntities()
 
     return temp;
 }
+
 std::vector<size_t> EntityManager::getEntitiesAlive()
 {
     std::vector<size_t> temp;
@@ -68,19 +71,23 @@ std::vector<size_t> EntityManager::getEntitiesAlive()
     return temp;
 }
 
-bool EntityManager::hasComponents(std::shared_ptr<Entity> e, std::vector<std::string> &compo) {
+bool EntityManager::hasComponents(std::shared_ptr<Entity> e, std::vector<std::string>& compo)
+{
     if(entitiesComponents[e->ID]) {
         for(std::string c : compo) {
-            if(!entitiesComponents[e->ID]->has(c)) return false;
+            if(!entitiesComponents[e->ID]->has(c))
+                return false;
         }
         return true;
     }
     return false;
 }
 
- bool EntityManager::hasComponents(std::shared_ptr<Entity> e, std::bitset<MAX_COMPONENTS> &bits) {
-        if(entitiesComponents[e->ID]) return entitiesComponents[e->ID]->has(bits);
-    }
+bool EntityManager::hasComponents(std::shared_ptr<Entity> e, std::bitset<MAX_COMPONENTS>& bits)
+{
+    if(entitiesComponents[e->ID])
+        return entitiesComponents[e->ID]->has(bits);
+}
 
 void EntityManager::deleteEntity(Entity* e)
 {

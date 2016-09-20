@@ -6,16 +6,11 @@
 #include "BaseComponent.h"
 class ComponentManager;
 
-template <typename C>
-class ComponentHandle {
- typedef C ComponentType;
-};
 
 template <class T>
-class Component : public BaseComponent {
+class Component : public BaseComponent{
 
     public:
-    	typedef ComponentHandle<T> Handle;
         Component() {}
 
         static std::string id() {

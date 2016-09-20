@@ -2,11 +2,9 @@
 
 class ComponentType {
   public:
-    ComponentType() {
-        id = nextID;
-        nextID++;
-    }
+    ComponentType();
+    ~ComponentType() {}
     static int nextID;
-    int id;
+    int id = 0;
     
 };

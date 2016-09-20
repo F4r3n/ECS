@@ -18,7 +18,8 @@ public:
     }
 
     virtual void update(float dt, std::shared_ptr<Entity> e) = 0;
-    virtual void init() = 0;
+    virtual void init(std::shared_ptr<Entity> e) = 0;
+    virtual void over() = 0;
     friend class SystemManager;
     template <typename T> void addComponent()
     {

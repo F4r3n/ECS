@@ -1,9 +1,9 @@
 #pragma once
 
-
 class BaseComponent {
 public:
-	BaseComponent() {}
-	virtual ~BaseComponent();
-	
+    BaseComponent() {
+    }
+    virtual ~BaseComponent() {
+    }
 };
