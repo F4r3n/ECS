@@ -2,6 +2,7 @@
 #define ENTITY_MANAGER_H
 #include <array>
 #include "ComponentManager.h"
+#include <limits>
 #define POOL_SIZE 1000000
 
 class Entity;
@@ -15,7 +16,6 @@ public:
     ~EntityManager();
     
     Entity* createEntity();
-    void destroyEntity(size_t id);
     void getEntities(std::function<void(Entity*)> func);
     void getEntitiesWithComponents(std::function<void(Entity*)> func, std::bitset<MAX_COMPONENTS>& bits);
     void refresh();
@@ -53,8 +53,10 @@ public:
     std::vector<size_t> getEntitiesAlive();
     bool hasComponents(Entity* e, std::vector<std::string>& compo);
     bool hasComponents(Entity* e, std::bitset<MAX_COMPONENTS>& bits);
-
+    void make();
 private:
+    void destroyEntity(size_t id, bool isActive);
+
     size_t getID(Entity* e);
 
     std::array<pEntity, POOL_SIZE> entities;
@@ -62,6 +64,7 @@ private:
     std::vector<size_t> free_id;
 
     std::vector<pEntity> entities_alive;
+    std::vector<pEntity> temp_entities;
     std::vector<size_t> entities_killed;
 
     std::array<std::unique_ptr<ComponentManager>, POOL_SIZE> entitiesComponents;

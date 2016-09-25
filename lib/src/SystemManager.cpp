@@ -21,13 +21,14 @@ void SystemManager::init(EntityManager& em) {
         em.getEntitiesWithComponents(&call_back_init, bits);
      
     }
+    EntityManager::get().make();
 }
 
 void SystemManager::update(float dt, EntityManager& em)
 {
     currentTime = dt;
     for(auto s : systems) {
-        
+        s->pre_update();
         currentSystem = s.get();
         std::vector<const std::type_info*> compo = s->getComponentsNeeded();
         std::bitset<MAX_COMPONENTS> bits;
@@ -35,5 +36,6 @@ void SystemManager::update(float dt, EntityManager& em)
         em.getEntitiesWithComponents(&call_back_update, bits);
      
         s->over();
+        EntityManager::get().make();
     }
 }
