@@ -3,7 +3,8 @@
 #include <vector>
 #include <string>
 #include <memory>
-#include "ComponentTypeManager.h"
+#include <bitset>
+#include "Config.h"
 class ComponentManager;
 class Entity;
 class EntityManager;
@@ -24,15 +25,20 @@ public:
     friend class SystemManager;
     template <typename T> void addComponent()
     {
-        ComponentTypeManager::registerComponent(typeid(T));
-        componentsNeeded.push_back(&typeid(T));
+        componentsNeeded.push_back(T::id());
+        bits.flip(T::id());
     }
-    std::vector<const std::type_info*> getComponentsNeeded() const {
+    std::vector<size_t> getComponentsNeeded() const {
         return componentsNeeded;
+    }
+    
+    std::bitset<MAX_COMPONENTS>& getMask(){
+        return bits;
     }
 
 private:
-    std::vector<const std::type_info*> componentsNeeded;
+    std::vector<size_t> componentsNeeded;
+    std::bitset<MAX_COMPONENTS> bits;
 };
 
 #endif

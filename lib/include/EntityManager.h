@@ -51,7 +51,7 @@ public:
 
     void deleteEntity(Entity* e);
     std::vector<size_t> getEntitiesAlive();
-    bool hasComponents(Entity* e, std::vector<std::string>& compo);
+    bool hasComponents(Entity* e, std::vector<std::size_t>& compo);
     bool hasComponents(Entity* e, std::bitset<MAX_COMPONENTS>& bits);
     void make();
 private:

@@ -1,6 +1,5 @@
 #ifndef COMPONENT_MANAGER_H
 #define COMPONENT_MANAGER_H
-#include "ComponentTypeManager.h"
 #include "Component.h"
 #include <vector>
 #include <memory>
@@ -9,7 +8,7 @@
 #include <array>
 #include <iostream>
 #include <bitset>
-#define MAX_COMPONENTS 100
+#include "Config.h"
 
 class ComponentManager
 {
@@ -27,14 +26,14 @@ public:
 
     template <typename T> T* addComponent(Component<T> *c)
     {
-        bits.set(ComponentTypeManager::registerComponent(typeid(T)), 1);
+        bits.set(T::id(), 1);
         components[T::id()].reset(c);
         //std::cout <<"Component "<< dynamic_cast<T*>(components[T::id()].get()) << std::endl;
 
         return dynamic_cast<T*>(components[T::id()].get());
     }
 
-    bool has(std::string value)
+    bool has(size_t value)
     {
         if(components.find(value) != components.end())
             return true;
@@ -47,7 +46,7 @@ public:
 
 private:
     std::bitset<MAX_COMPONENTS> bits;
-    std::unordered_map<std::string, std::unique_ptr<BaseComponent> > components;
+    std::unordered_map<size_t, std::unique_ptr<BaseComponent> > components;
 };
 
 #endif

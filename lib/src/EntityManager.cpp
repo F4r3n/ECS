@@ -81,11 +81,11 @@ std::vector<size_t> EntityManager::getEntitiesAlive() {
     return temp;
 }
 
-bool EntityManager::hasComponents(Entity* e, std::vector<std::string>& compo) {
+bool EntityManager::hasComponents(Entity* e, std::vector<std::size_t>& compo) {
     if(!e)
         return false;
     if(entitiesComponents[e->ID]) {
-        for(std::string c : compo) {
+        for(std::size_t c : compo) {
             if(!entitiesComponents[e->ID]->has(c))
                 return false;
         }
