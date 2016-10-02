@@ -42,7 +42,7 @@ public:
         addComponent<Position>();
     }
     void update(float dt, Entity* e) {
-        //std::cout << "Called m" << std::endl;
+       // std::cout << "Called m" << std::endl;
         //std::cout << e->get<Position>()->x << std::endl;
     }
     void pre_update() {
@@ -54,6 +54,7 @@ public:
     ~Movement() {
     }
     void init(Entity* e) {
+        std::cout << e->ID << std::endl;
       //  std::cout << "Init movement" << std::endl;
       // Entity *en = EntityManager::get().createEntity();
       //  std::cout << en->ID << std::endl;
@@ -92,19 +93,26 @@ int main() {
     SystemManager systemManager;
     Entity* e = EntityManager::get().createEntity();
     Entity* e2 = EntityManager::get().createEntity();
-    
+    EntityManager::get().make();
     std::cout << e->ID << std::endl;
     std::cout << e2->ID << std::endl;
+    Position *p = e2->addComponent<Position>();
     e2->destroy();
+    e2 = EntityManager::get().createEntity();
+    std::cout << e2->ID << std::endl;
+    
+    
+    
+    
 
     std::cout << "Components " << std::endl;
+    
 
-    e->addComponent<Position>();
+    Position *p2 = e->addComponent<Position>();
     e->addComponent<Data>();
-    // p->x = 5;
-    // p->y = 6;
-    // p = e->get<Position>();
-    // std::cout << p->x <<" " << p->y<< std::endl;
+    p2->x = 5;
+    p2->y = 6;
+    
     EntityManager::get().make();
     std::shared_ptr<Movement> m = std::make_shared<Movement>();
     systemManager.addSystem(m);

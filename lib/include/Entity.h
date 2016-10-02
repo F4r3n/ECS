@@ -18,6 +18,7 @@ public:
     size_t ID;
     bool active = false;
     bool toCreate = true;
+    bool allocated = false;
     template <typename T> T* addComponent(Component<T> *c = new T())
     {
        return EntityManager::get().addComponent<T>(this, c);

@@ -42,7 +42,11 @@ public:
     
     bool has(std::bitset<MAX_COMPONENTS> &compo) {
         return ((bits & compo)  == compo);
-    } 
+    }
+    
+    void resetMask() {
+        bits.reset();
+    }
 
 private:
     std::bitset<MAX_COMPONENTS> bits;

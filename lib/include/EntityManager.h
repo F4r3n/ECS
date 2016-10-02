@@ -18,12 +18,15 @@ public:
     Entity* createEntity();
     void getEntities(std::function<void(Entity*)> func);
     void getEntitiesWithComponents(std::function<void(Entity*)> func, std::bitset<MAX_COMPONENTS>& bits);
-    void refresh();
+    void killAll();
     inline bool isExists(size_t id);
-   
+    inline bool checkID(size_t ID) const {
+        return ID == MAX_ID;
+    }
 
     template <typename T> T* addComponent(size_t ID, Component<T> *c)
     {
+        if(checkID(ID)) return nullptr;
         if(entitiesComponents[ID] != nullptr) {
             return entitiesComponents[ID]->addComponent<T>(c);
         } else {
@@ -58,8 +61,8 @@ private:
     void destroyEntity(size_t id, bool isActive);
 
     size_t getID(Entity* e);
-
-    std::array<pEntity, POOL_SIZE> entities;
+    const size_t MAX_ID = std::numeric_limits<size_t>::max();
+    
 
     std::vector<size_t> free_id;
 
