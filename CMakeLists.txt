@@ -4,3 +4,4 @@ include(CheckCXXCompilerFlag)
 
 add_subdirectory("lib")
 add_subdirectory("sample")
+add_subdirectory("Tests")

@@ -1,0 +1,37 @@
+#include "gtest/gtest.h"
+#include "ECS.h"
+#include <iostream>
+int size = 1000000;
+class AllocTest : public ::testing::Test {
+public:
+    std::vector<Entity*> entities;
+
+    void SetUp() {
+        for(int i = 0; i < size; ++i) {
+            entities.push_back(EntityManager::get().createEntity());
+        }
+        EntityManager::get().make();
+    }
+};
+
+
+
+TEST_F(AllocTest, Destroy) {
+
+    for(int i = 0; i < size; ++i) {
+        entities[i]->destroy();
+    }
+}
+
+TEST_F(AllocTest, SecondAlloc) {
+   for(int i = 0; i < size; ++i) {
+        entities[i]->destroy();
+    }
+    for(int i = 0; i < size; ++i) {
+       entities.push_back(EntityManager::get().createEntity());
+    }
+    EntityManager::get().make();
+}
+
+
+

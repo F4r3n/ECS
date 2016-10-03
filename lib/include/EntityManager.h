@@ -72,6 +72,8 @@ private:
 
     std::array<std::unique_ptr<ComponentManager>, POOL_SIZE> entitiesComponents;
     static EntityManager em;
+    
+    size_t capacity = 0;
 };
 
 #endif

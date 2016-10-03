@@ -9,6 +9,8 @@ EntityManager::EntityManager() {
     for(size_t i = 0; i < free_id.size(); ++i) {
         free_id[i] = free_id.size() - i - 1;
     }
+    entities_alive.reserve(POOL_SIZE);
+    entities_killed.reserve(POOL_SIZE);
 }
 
 EntityManager& EntityManager::get() {
@@ -53,17 +55,20 @@ void EntityManager::make() {
 }
 
 Entity* EntityManager::createEntity() {
+    if(capacity == POOL_SIZE) return nullptr;
     if(entities_killed.empty()) {
+        capacity++;
         std::unique_ptr<Entity> entity = std::make_unique<Entity>(free_id.back());
-        entity->active = true;
+       
         entity->allocated = true;
 
         temp_entities.push_back(std::move(entity));
         free_id.pop_back();
-
+        
         return temp_entities.back().get();
 
     } else {
+        capacity++;
         size_t id = entities_killed.back();
 
         entities_killed.pop_back();
@@ -124,20 +129,24 @@ bool EntityManager::hasComponents(Entity* e, std::bitset<MAX_COMPONENTS>& bits) 
 
 void EntityManager::deleteEntity(Entity* e) {
     assert(e);
-
     if(entitiesComponents[e->ID]) {
         entitiesComponents[e->ID]->resetMask();
         entitiesComponents[e->ID].reset();
     }
+
     destroyEntity(e->ID, e->active);
+
     e->toCreate = false;
     e->active = false;
 }
 
 void EntityManager::destroyEntity(size_t id, bool isActive) {
-    entities_killed.push_back(id);
-    if(isActive)
+    
+    if(isActive && !entities_alive.empty()) {
+        capacity--;
         entities_alive[id]->ID = MAX_ID;
+        entities_killed.push_back(id);
+    }
 }
 
 size_t EntityManager::getID(Entity* e) {
