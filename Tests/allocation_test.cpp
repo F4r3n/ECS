@@ -1,7 +1,6 @@
 #include "gtest/gtest.h"
 #include "ECS.h"
-#include <iostream>
-int size = 1000000;
+int size = 1000;
 class AllocTest : public ::testing::Test {
 public:
     std::vector<Entity*> entities;

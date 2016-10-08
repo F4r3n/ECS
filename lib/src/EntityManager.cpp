@@ -55,7 +55,9 @@ void EntityManager::make() {
 }
 
 Entity* EntityManager::createEntity() {
+    
     if(capacity == POOL_SIZE) return nullptr;
+    
     if(entities_killed.empty()) {
         capacity++;
         std::unique_ptr<Entity> entity = std::make_unique<Entity>(free_id.back());
@@ -119,11 +121,18 @@ bool EntityManager::hasComponents(Entity* e, std::vector<std::size_t>& compo) {
     return false;
 }
 
-bool EntityManager::hasComponents(Entity* e, std::bitset<MAX_COMPONENTS>& bits) {
+bool EntityManager::hasComponents(Entity* e, Mask& bits) {
     if(!e)
         return false;
     if(entitiesComponents[e->ID])
         return entitiesComponents[e->ID]->has(bits);
+    return false;
+}
+
+bool EntityManager::hasComponents(size_t id, Mask& bits) {
+    //std::cout <<"Has "<< id << " " << entitiesComponents[id]->has(bits) << std::endl;
+    if(entitiesComponents[id])
+        return entitiesComponents[id]->has(bits);
     return false;
 }
 
@@ -135,7 +144,6 @@ void EntityManager::deleteEntity(Entity* e) {
     }
 
     destroyEntity(e->ID, e->active);
-
     e->toCreate = false;
     e->active = false;
 }

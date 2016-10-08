@@ -94,10 +94,13 @@ int main() {
     Entity* e = EntityManager::get().createEntity();
     Entity* e2 = EntityManager::get().createEntity();
     EntityManager::get().make();
-    std::cout << e->ID << std::endl;
-    std::cout << e2->ID << std::endl;
+   
     Position *p = e2->addComponent<Position>();
-    e2->destroy();
+    
+    for(auto entity : EntityManager::get().iterate<Position>()) {
+        std::cout << entity->ID << std::endl;
+    }
+    /*e2->destroy();
     e2 = EntityManager::get().createEntity();
     std::cout << e2->ID << std::endl;
     
@@ -128,6 +131,6 @@ int main() {
         //}
         systemManager.update(0.016, EntityManager::get());
         //++i;
-    }
+    }*/
     return 0;
 }

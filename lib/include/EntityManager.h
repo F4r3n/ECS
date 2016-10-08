@@ -7,26 +7,25 @@
 
 class Entity;
 typedef std::unique_ptr<Entity> pEntity;
-
-class EntityManager
-{
+typedef std::bitset<MAX_COMPONENTS> Mask;
+class EntityManager {
 public:
     EntityManager();
     static EntityManager& get();
     ~EntityManager();
-    
+
     Entity* createEntity();
     void getEntities(std::function<void(Entity*)> func);
-    void getEntitiesWithComponents(std::function<void(Entity*)> func, std::bitset<MAX_COMPONENTS>& bits);
+    void getEntitiesWithComponents(std::function<void(Entity*)> func, Mask& bits);
     void killAll();
-    inline bool isExists(size_t id);
+    bool isExists(size_t id);
     inline bool checkID(size_t ID) const {
         return ID == MAX_ID;
     }
 
-    template <typename T> T* addComponent(size_t ID, Component<T> *c)
-    {
-        if(checkID(ID)) return nullptr;
+    template <typename T> T* addComponent(size_t ID, Component<T>* c) {
+        if(checkID(ID))
+            return nullptr;
         if(entitiesComponents[ID] != nullptr) {
             return entitiesComponents[ID]->addComponent<T>(c);
         } else {
@@ -34,19 +33,16 @@ public:
             return entitiesComponents[ID]->addComponent<T>(c);
         }
     }
-    
-    template <typename T> T* addComponent(Entity* e, Component<T> *c)
-    {
-       return addComponent<T>(getID(e), c);
+
+    template <typename T> T* addComponent(Entity* e, Component<T>* c) {
+        return addComponent<T>(getID(e), c);
     }
 
-    std::array<std::unique_ptr<ComponentManager>, POOL_SIZE>& getEntitiesComponents()
-    {
+    std::array<std::unique_ptr<ComponentManager>, POOL_SIZE>& getEntitiesComponents() {
         return entitiesComponents;
     }
 
-    template <typename T> T* get(Entity* e)
-    {
+    template <typename T> T* get(Entity* e) {
         if(!entitiesComponents[getID(e)])
             return nullptr;
         return entitiesComponents[getID(e)]->getComponent<T>();
@@ -55,14 +51,95 @@ public:
     void deleteEntity(Entity* e);
     std::vector<size_t> getEntitiesAlive();
     bool hasComponents(Entity* e, std::vector<std::size_t>& compo);
-    bool hasComponents(Entity* e, std::bitset<MAX_COMPONENTS>& bits);
+    bool hasComponents(Entity* e, Mask& bits);
     void make();
+    bool hasComponents(size_t id, Mask& bits);
+    
+    Entity* getEntity(size_t id) {
+        return entities_alive[id].get();
+    }
+class EntityIterator : public std::iterator<std::input_iterator_tag, size_t> {
+    public:
+        EntityIterator(const Mask& mask, size_t capacity, size_t index) {
+            this->mask = mask;
+            this->capacity = capacity;
+            this->currentIndex = index;
+            next();
+        }
+       
+       Entity* operator*() {
+           return EntityManager::get().getEntity(currentIndex);
+       }
+      
+        EntityIterator operator++() {
+            currentIndex++;
+            next();
+            return EntityIterator(mask, capacity, currentIndex);
+        }
+        
+         EntityIterator begin(){
+             return EntityIterator(mask, capacity, 0);
+        }
+        
+         EntityIterator end() {
+             return EntityIterator(mask, capacity, capacity);
+        }
+        
+        bool operator!=(EntityIterator &i) {
+            return i.currentIndex != currentIndex;
+        }
+        
+        void next() {
+            
+            while(!valid() && currentIndex < capacity) {
+                currentIndex++;
+            }
+        }
+        
+        bool valid() {
+            return EntityManager::get().isExists(currentIndex)
+            && EntityManager::get().hasComponents(currentIndex, mask);
+        }
+        
+       
+   
+
+    private:
+        Mask mask;
+        size_t currentIndex;
+        size_t capacity;
+    };
+    
+     template <typename T>
+    void createMask(Mask &m) {
+        m.flip(T::id());
+    }
+    
+     template <typename T, typename ...Args>
+    void createMask(Mask &m, T t) {
+        m.flip(T::id());
+        createMask<Args...>(m);
+    }
+    
+    template <typename ...Args>
+    Mask createMask() {
+        Mask m;
+        createMask<Args...>(m);
+        
+        return m;
+    }
+    
+    template <typename ...Args>
+    EntityIterator iterate() {
+        EntityIterator iterator(createMask<Args...>(), POOL_SIZE, 0);
+        return iterator;
+    }
+
 private:
     void destroyEntity(size_t id, bool isActive);
 
     size_t getID(Entity* e);
     const size_t MAX_ID = std::numeric_limits<size_t>::max();
-    
 
     std::vector<size_t> free_id;
 
@@ -72,8 +149,12 @@ private:
 
     std::array<std::unique_ptr<ComponentManager>, POOL_SIZE> entitiesComponents;
     static EntityManager em;
-    
+
     size_t capacity = 0;
+    
+    
 };
+
+    
 
 #endif
