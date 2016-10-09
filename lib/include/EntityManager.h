@@ -55,6 +55,11 @@ public:
     void make();
     bool hasComponents(size_t id, Mask& bits);
     
+    template <typename T>
+    bool hasComponent(size_t id) {
+        if(checkID(id)) return false;
+        return entitiesComponents[id]->has<T>();
+    }
     Entity* getEntity(size_t id) {
         return entities_alive[id].get();
     }

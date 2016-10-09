@@ -52,6 +52,13 @@ struct Collision {
     int pos = 1;
 };
 
+struct Collision2 {
+    Collision2(int i) {
+        pos = i;
+    }
+    int pos = 1;
+};
+
 
 class Movement : public System {
 public:
@@ -61,6 +68,7 @@ public:
     void update(float dt, EntityManager &em, EventManager &event) {
         for(auto e : em.iterate<Position>()) {
             event.emit<Collision>(e->ID);
+            event.emit<Collision2>(e->ID);
         }
        // std::cout << "Called m" << std::endl;
         //std::cout << e->get<Position>()->x << std::endl;
@@ -100,11 +108,16 @@ public:
     }
     
     void receive(const Collision &collision) {
-        std::cout << collision.pos << std::endl;
+        //std::cout << collision.pos << std::endl;
+    }
+    
+     void receive(const Collision2 &collision) {
+        //std::cout <<" 2 "<< collision.pos << std::endl;
     }
     
     void init( EntityManager &em, EventManager &event) {
         event.subscribe<Collision>(*this);
+        event.subscribe<Collision2>(*this);
       // std::cout << "Init script" << std::endl;
       // Entity *en = EntityManager::get().createEntity();
       // std::cout << en->ID << std::endl;

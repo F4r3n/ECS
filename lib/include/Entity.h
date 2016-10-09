@@ -29,6 +29,11 @@ public:
         return EntityManager::get().get<T>(this);
     }
     
+    template <typename T> bool has()
+    {
+        return EntityManager::get().hasComponent<T>(ID);
+    }
+    
     void destroy();
 private:
 };

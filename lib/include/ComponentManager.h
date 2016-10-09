@@ -33,11 +33,14 @@ public:
         return dynamic_cast<T*>(components[T::id()].get());
     }
 
-    bool has(size_t value)
+    template <typename T>
+    bool has()
     {
-        if(components.find(value) != components.end())
-            return true;
-        return false;
+       return bits.test(T::id());
+    }
+    bool has(size_t id)
+    {
+       return bits.test(id);
     }
     
     bool has(std::bitset<MAX_COMPONENTS> &compo) const{
