@@ -4,6 +4,7 @@
 #include <typeinfo>
 #include <cassert>
 #include "EntityManager.h"
+#include "Event.h"
 class SystemManager {
 public:
     SystemManager() {
@@ -21,8 +22,8 @@ public:
         return std::dynamic_pointer_cast<T>(systems[index]);
     }
 
-    void update(float dt, EntityManager& em);
-    void init(EntityManager& em);
+    void update(float dt, EntityManager& em, EventManager &event);
+    void init(EntityManager& em, EventManager &event);
     //void call_back(Entity *e);
 
 private:

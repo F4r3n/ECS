@@ -10,9 +10,14 @@ link_directories("../bin")
 
 enable_testing()
 set(TEST_NAME TEST_1)
-add_executable(${TEST_NAME} ComponentTest.cpp allocation_test.cpp main.cpp)
+add_executable(${TEST_NAME} allocation_test.cpp main.cpp)
 target_link_libraries(${TEST_NAME} ECS ${GTEST_LIBRARIES})
 add_test(test1 ${TEST_NAME})
+
+set(TEST_NAME TEST_2)
+add_executable(${TEST_NAME} ComponentTest.cpp main.cpp)
+target_link_libraries(${TEST_NAME} ECS ${GTEST_LIBRARIES})
+add_test(test2 ${TEST_NAME})
 
 
 

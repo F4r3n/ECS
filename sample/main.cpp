@@ -25,6 +25,16 @@ public:
     }
 };
 
+class Data2 : public Component<Data2> {
+public:
+    Data2() {
+    }
+    int x = 1;
+    int y = 1;
+    ~Data2() {
+    }
+};
+
 class C2 : public Component<C2> {
 public:
     C2() {
@@ -35,17 +45,27 @@ public:
     }
 };
 
+struct Collision {
+    Collision(int i) {
+        pos = i;
+    }
+    int pos = 1;
+};
+
 
 class Movement : public System {
 public:
     Movement() {
         addComponent<Position>();
     }
-    void update(float dt, Entity* e) {
+    void update(float dt, EntityManager &em, EventManager &event) {
+        for(auto e : em.iterate<Position>()) {
+            event.emit<Collision>(e->ID);
+        }
        // std::cout << "Called m" << std::endl;
         //std::cout << e->get<Position>()->x << std::endl;
     }
-    void pre_update() {
+    void pre_update(EntityManager &em) {
                // std::cout << "Movement" << std::endl;
 
     }
@@ -53,8 +73,7 @@ public:
     }
     ~Movement() {
     }
-    void init(Entity* e) {
-        std::cout << e->ID << std::endl;
+    void init( EntityManager &em, EventManager &event) {
       //  std::cout << "Init movement" << std::endl;
       // Entity *en = EntityManager::get().createEntity();
       //  std::cout << en->ID << std::endl;
@@ -63,23 +82,29 @@ public:
     }
 };
 
-class ScriptSystem : public System {
+class ScriptSystem : public System, public Receiver<ScriptSystem>{
 public:
     ScriptSystem() {
         addComponent<Data>();
     }
-    void update(float dt, Entity* e) {
+    void update(float dt, EntityManager &em, EventManager &event) {
         //std::cout << "Called s" << std::endl;
         //std::cout << e->get<Data>()->x << std::endl;
     }
-    void pre_update() {
+    void pre_update( EntityManager &em) {
        // std::cout << "Script" << std::endl;
     }
     void over() {
     }
     ~ScriptSystem() {
     }
-    void init(Entity* e) {
+    
+    void receive(const Collision &collision) {
+        std::cout << collision.pos << std::endl;
+    }
+    
+    void init( EntityManager &em, EventManager &event) {
+        event.subscribe<Collision>(*this);
       // std::cout << "Init script" << std::endl;
       // Entity *en = EntityManager::get().createEntity();
       // std::cout << en->ID << std::endl;
@@ -100,17 +125,11 @@ int main() {
     for(auto entity : EntityManager::get().iterate<Position>()) {
         std::cout << entity->ID << std::endl;
     }
-    /*e2->destroy();
-    e2 = EntityManager::get().createEntity();
-    std::cout << e2->ID << std::endl;
-    
-    
+  
     
     
 
     std::cout << "Components " << std::endl;
-    
-
     Position *p2 = e->addComponent<Position>();
     e->addComponent<Data>();
     p2->x = 5;
@@ -120,17 +139,16 @@ int main() {
     std::shared_ptr<Movement> m = std::make_shared<Movement>();
     systemManager.addSystem(m);
     systemManager.addSystem(std::make_shared<ScriptSystem>());
-    systemManager.init(EntityManager::get());
-   // return -1;
-   // return -1;
+    systemManager.init(EntityManager::get(), EventManager::get());
+  
     while(1) {
 
         //if(i < 100) {
         //    Position* p = EntityManager::get().createEntity()->addComponent<Position>();
         //    p->x = i;
         //}
-        systemManager.update(0.016, EntityManager::get());
+        systemManager.update(0.016, EntityManager::get(), EventManager::get());
         //++i;
-    }*/
+    }
     return 0;
 }

@@ -22,8 +22,8 @@ EntityManager::~EntityManager() {
 
 void EntityManager::killAll() {
     for(auto& e : entities_alive) {
-        if(e->allocated) {
-            if(entitiesComponents[e->ID]) {
+        if(e && e->allocated) {
+            if(!checkID(e->ID) && entitiesComponents[e->ID]) {
                 entitiesComponents[e->ID].reset();
             }
             e.reset();
@@ -35,6 +35,8 @@ void EntityManager::killAll() {
     }
     entities_alive.clear();
     entities_killed.clear();
+    capacity = 0;
+    posIndex = 0;
 }
 
 bool EntityManager::isExists(size_t id) {
@@ -59,6 +61,7 @@ Entity* EntityManager::createEntity() {
     if(capacity == POOL_SIZE) return nullptr;
     
     if(entities_killed.empty()) {
+        posIndex++;
         capacity++;
         std::unique_ptr<Entity> entity = std::make_unique<Entity>(free_id.back());
        

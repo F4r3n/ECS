@@ -60,7 +60,7 @@ public:
     }
 class EntityIterator : public std::iterator<std::input_iterator_tag, size_t> {
     public:
-        EntityIterator(const Mask& mask, size_t capacity, size_t index) {
+        EntityIterator(const Mask& mask, const size_t capacity, const size_t index) {
             this->mask = mask;
             this->capacity = capacity;
             this->currentIndex = index;
@@ -111,27 +111,25 @@ class EntityIterator : public std::iterator<std::input_iterator_tag, size_t> {
     };
     
      template <typename T>
-    void createMask(Mask &m) {
-        m.flip(T::id());
-    }
-    
-     template <typename T, typename ...Args>
-    void createMask(Mask &m, T t) {
-        m.flip(T::id());
-        createMask<Args...>(m);
-    }
-    
-    template <typename ...Args>
     Mask createMask() {
-        Mask m;
-        createMask<Args...>(m);
-        
-        return m;
+        Mask mask;
+        mask.set(T::id());
+        return mask;
+    }
+    
+     template <typename C1, typename C2, typename ... Components>
+    Mask createMask() {
+        return createMask<C1>() | createMask<C2, Components...>();
     }
     
     template <typename ...Args>
     EntityIterator iterate() {
-        EntityIterator iterator(createMask<Args...>(), POOL_SIZE, 0);
+        EntityIterator iterator(createMask<Args...>(), posIndex, 0);
+        return iterator;
+    }
+    
+    EntityIterator iterate(const Mask &mask) {
+        EntityIterator iterator(mask, posIndex, 0);
         return iterator;
     }
 
@@ -151,7 +149,7 @@ private:
     static EntityManager em;
 
     size_t capacity = 0;
-    
+    size_t posIndex = 0;
     
 };
 

@@ -11,6 +11,12 @@ public:
         }
         EntityManager::get().make();
     }
+    
+    void TearDown() {
+        
+        //EntityManager::get().killAll();
+    }
+   
 };
 
 
@@ -30,6 +36,7 @@ TEST_F(AllocTest, SecondAlloc) {
        entities.push_back(EntityManager::get().createEntity());
     }
     EntityManager::get().make();
+   
 }
 
 

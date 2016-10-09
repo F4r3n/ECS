@@ -40,7 +40,8 @@ public:
         return false;
     }
     
-    bool has(std::bitset<MAX_COMPONENTS> &compo) {
+    bool has(std::bitset<MAX_COMPONENTS> &compo) const{
+        if(!compo.any()) return false;
         return ((bits & compo)  == compo);
     }
     
