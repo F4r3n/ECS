@@ -43,7 +43,7 @@ public:
        return bits.test(id);
     }
     
-    bool has(std::bitset<MAX_COMPONENTS> &compo) const{
+    bool has(const std::bitset<MAX_COMPONENTS> &compo) const{
         if(!compo.any()) return false;
         return ((bits & compo)  == compo);
     }

@@ -18,7 +18,7 @@ public:
     void getEntities(std::function<void(Entity*)> func);
     void getEntitiesWithComponents(std::function<void(Entity*)> func, Mask& bits);
     void killAll();
-    bool isExists(size_t id);
+    bool isExists(size_t id) const;
     inline bool checkID(size_t ID) const {
         return ID == MAX_ID;
     }
@@ -50,10 +50,10 @@ public:
 
     void deleteEntity(Entity* e);
     std::vector<size_t> getEntitiesAlive();
-    bool hasComponents(Entity* e, std::vector<std::size_t>& compo);
-    bool hasComponents(Entity* e, Mask& bits);
+    bool hasComponents(Entity* e, const std::vector<std::size_t>& compo) const;
+    bool hasComponents(Entity* e, const Mask& bits) const;
     void make();
-    bool hasComponents(size_t id, Mask& bits);
+    bool hasComponents(size_t id, const Mask& bits) const;
     
     template <typename T>
     bool hasComponent(size_t id) {
@@ -101,7 +101,7 @@ class EntityIterator : public std::iterator<std::input_iterator_tag, size_t> {
             }
         }
         
-        bool valid() {
+        inline bool valid() const{
             return EntityManager::get().isExists(currentIndex)
             && EntityManager::get().hasComponents(currentIndex, mask);
         }

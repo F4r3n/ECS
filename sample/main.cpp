@@ -63,12 +63,10 @@ struct Collision2 {
 class Movement : public System {
 public:
     Movement() {
-        addComponent<Position>();
     }
     void update(float dt, EntityManager &em, EventManager &event) {
         for(auto e : em.iterate<Position>()) {
-            event.emit<Collision>(e->ID);
-            event.emit<Collision2>(e->ID);
+          
         }
        // std::cout << "Called m" << std::endl;
         //std::cout << e->get<Position>()->x << std::endl;
@@ -96,8 +94,9 @@ public:
         addComponent<Data>();
     }
     void update(float dt, EntityManager &em, EventManager &event) {
-        //std::cout << "Called s" << std::endl;
-        //std::cout << e->get<Data>()->x << std::endl;
+       for(auto e : em.iterate<Data>()) {
+          
+        }
     }
     void pre_update( EntityManager &em) {
        // std::cout << "Script" << std::endl;
@@ -116,8 +115,7 @@ public:
     }
     
     void init( EntityManager &em, EventManager &event) {
-        event.subscribe<Collision>(*this);
-        event.subscribe<Collision2>(*this);
+       
       // std::cout << "Init script" << std::endl;
       // Entity *en = EntityManager::get().createEntity();
       // std::cout << en->ID << std::endl;
@@ -127,26 +125,13 @@ public:
 };
 
 int main() {
-    ComponentManager compo;
+    
     SystemManager systemManager;
-    Entity* e = EntityManager::get().createEntity();
-    Entity* e2 = EntityManager::get().createEntity();
-    EntityManager::get().make();
-   
-    Position *p = e2->addComponent<Position>();
-    
-    for(auto entity : EntityManager::get().iterate<Position>()) {
-        std::cout << entity->ID << std::endl;
+    for(int i = 0; i < 1000; ++i) {
+        Entity* e = EntityManager::get().createEntity();
+        e->addComponent<Position>();
+        e->addComponent<Data>();
     }
-  
-    
-    
-
-    std::cout << "Components " << std::endl;
-    Position *p2 = e->addComponent<Position>();
-    e->addComponent<Data>();
-    p2->x = 5;
-    p2->y = 6;
     
     EntityManager::get().make();
     std::shared_ptr<Movement> m = std::make_shared<Movement>();
@@ -154,8 +139,9 @@ int main() {
     systemManager.addSystem(std::make_shared<ScriptSystem>());
     systemManager.init(EntityManager::get(), EventManager::get());
   
-    while(1) {
-
+  //Test 1000 iterations
+    for(int i = 0; i < 1000; ++i){
+        std::cout << "Itreation " << i << std::endl;
         //if(i < 100) {
         //    Position* p = EntityManager::get().createEntity()->addComponent<Position>();
         //    p->x = i;

@@ -39,8 +39,8 @@ void EntityManager::killAll() {
     posIndex = 0;
 }
 
-bool EntityManager::isExists(size_t id) {
-    return (id < entities_alive.size() && entities_alive[id] &&
+bool EntityManager::isExists(size_t id) const{
+    return (id < capacity && entities_alive[id] &&
             (entities_alive[id]->ID != MAX_ID));
 }
 
@@ -111,7 +111,7 @@ std::vector<size_t> EntityManager::getEntitiesAlive() {
     return temp;
 }
 
-bool EntityManager::hasComponents(Entity* e, std::vector<std::size_t>& compo) {
+bool EntityManager::hasComponents(Entity* e, const std::vector<std::size_t>& compo) const{
     if(!e || isExists(e->ID))
         return false;
     if(entitiesComponents[e->ID]) {
@@ -124,7 +124,7 @@ bool EntityManager::hasComponents(Entity* e, std::vector<std::size_t>& compo) {
     return false;
 }
 
-bool EntityManager::hasComponents(Entity* e, Mask& bits) {
+bool EntityManager::hasComponents(Entity* e, const Mask& bits) const{
     if(!e)
         return false;
     if(entitiesComponents[e->ID])
@@ -132,7 +132,7 @@ bool EntityManager::hasComponents(Entity* e, Mask& bits) {
     return false;
 }
 
-bool EntityManager::hasComponents(size_t id, Mask& bits) {
+bool EntityManager::hasComponents(size_t id,const Mask& bits) const {
     //std::cout <<"Has "<< id << " " << entitiesComponents[id]->has(bits) << std::endl;
     if(entitiesComponents[id])
         return entitiesComponents[id]->has(bits);
