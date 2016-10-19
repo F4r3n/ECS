@@ -11,7 +11,9 @@ typedef std::bitset<MAX_COMPONENTS> Mask;
 class EntityManager {
 public:
     EntityManager();
-    static EntityManager& get();
+    static inline EntityManager& get() {
+        return em;
+    }
     ~EntityManager();
 
     Entity* createEntity();
@@ -60,7 +62,8 @@ public:
         if(checkID(id)) return false;
         return entitiesComponents[id]->has<T>();
     }
-    Entity* getEntity(size_t id) {
+    inline Entity* getEntity(size_t id) {
+        if(checkID(id)) return nullptr;
         return entities_alive[id].get();
     }
 class EntityIterator : public std::iterator<std::input_iterator_tag, size_t> {

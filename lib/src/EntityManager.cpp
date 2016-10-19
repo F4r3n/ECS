@@ -13,9 +13,6 @@ EntityManager::EntityManager() {
     entities_killed.reserve(POOL_SIZE);
 }
 
-EntityManager& EntityManager::get() {
-    return em;
-}
 
 EntityManager::~EntityManager() {
 }
