@@ -15,19 +15,21 @@ public:
     ~SystemManager() {
     }
 
-    void addSystem(std::unique_ptr<System> system) {
-        systems.push_back(std::move(system));
+    void addSystem(std::shared_ptr<System> system) {
+        systems.push_back(system);
     }
     
-    System* operator[](unsigned int index) {
-        return systems[index].get();
+    std::shared_ptr<System> getSystem(unsigned int index) {
+          if(index >= systems.size())
+            return nullptr;
+        return systems[index]; 
     }
     
-    void addSystem(unsigned int position, std::unique_ptr<System> &&system) {
-        systems[position] = std::move(system);
+    void addSystem(unsigned int position, std::shared_ptr<System> system) {
+        systems[position] = system;
     }
 
-    template <typename T> std::unique_ptr<T> getSystem(int index) {
+    template <typename T> std::shared_ptr<T> get(unsigned int index) {
         if(index >= systems.size())
             return nullptr;
         return std::dynamic_pointer_cast<T>(systems[index]);
@@ -38,5 +40,5 @@ public:
     //void call_back(Entity *e);
 
 private:
-    std::vector<std::unique_ptr<System> > systems;
+    std::vector<std::shared_ptr<System> > systems;
 };
