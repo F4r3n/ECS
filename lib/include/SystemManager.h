@@ -7,16 +7,21 @@
 #include "Event.h"
 class SystemManager {
 public:
-    SystemManager() {
+    SystemManager(unsigned int numberSystems) {
+        systems.resize(numberSystems);
     }
     ~SystemManager() {
     }
 
-    void addSystem(std::shared_ptr<System> system) {
-        systems.push_back(system);
+    void addSystem(std::unique_ptr<System> system) {
+        systems.push_back(std::move(system));
+    }
+    
+    void addSystem(unsigned int position, std::unique_ptr<System> &&system) {
+        systems.insert(systems.begin() + position, std::move(system));
     }
 
-    template <typename T> std::shared_ptr<T> getSystem(int index) {
+    template <typename T> std::unique_ptr<T> getSystem(int index) {
         if(index >= systems.size())
             return nullptr;
         return std::dynamic_pointer_cast<T>(systems[index]);
@@ -27,5 +32,5 @@ public:
     //void call_back(Entity *e);
 
 private:
-    std::vector<std::shared_ptr<System> > systems;
+    std::vector<std::unique_ptr<System> > systems;
 };

@@ -18,6 +18,7 @@ public:
 
     Entity* createEntity();
     void getEntities(std::function<void(Entity*)> func);
+    
     void getEntitiesWithComponents(std::function<void(Entity*)> func, Mask& bits);
     void killAll();
     bool isExists(size_t id) const;
@@ -39,6 +40,7 @@ public:
     template <typename T> T* addComponent(Entity* e, Component<T>* c) {
         return addComponent<T>(getID(e), c);
     }
+    
 
     std::array<std::unique_ptr<ComponentManager>, POOL_SIZE>& getEntitiesComponents() {
         return entitiesComponents;

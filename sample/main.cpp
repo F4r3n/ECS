@@ -126,7 +126,7 @@ public:
 
 int main() {
     
-    SystemManager systemManager;
+    SystemManager systemManager(2);
     for(int i = 0; i < 1000; ++i) {
         Entity* e = EntityManager::get().createEntity();
         e->addComponent<Position>();
@@ -134,9 +134,8 @@ int main() {
     }
     
     EntityManager::get().make();
-    std::shared_ptr<Movement> m = std::make_shared<Movement>();
-    systemManager.addSystem(m);
-    systemManager.addSystem(std::make_shared<ScriptSystem>());
+    systemManager.addSystem(std::make_unique<Movement>());
+    systemManager.addSystem(std::make_unique<ScriptSystem>());
     systemManager.init(EntityManager::get(), EventManager::get());
   
   //Test 1000 iterations

@@ -9,6 +9,7 @@ class BaseComponent {
 public:
     BaseComponent();
     virtual ~BaseComponent();
+
 protected:
     static std::size_t family_counter;
 };

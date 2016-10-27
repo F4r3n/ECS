@@ -13,7 +13,8 @@ void call_back_update(Entity* e) {
 
 void SystemManager::init(EntityManager& em, EventManager &event) {
     EntityManager::get().make();
-    for(auto s : systems) {
+    for(auto &s : systems) {
+        if(!s) continue;
         //currentSystem = s.get();
         //em.getEntitiesWithComponents(&call_back_init, currentSystem->getMask());
         s->init(em, event);
@@ -23,7 +24,9 @@ void SystemManager::init(EntityManager& em, EventManager &event) {
 
 void SystemManager::update(float dt, EntityManager& em, EventManager &event) {
     currentTime = dt;
-    for(auto s : systems) {
+    for(auto &s : systems) {
+        if(!s) continue;
+
         s->pre_update(em);
         //currentSystem = s.get();
         //em.getEntitiesWithComponents(&call_back_update, currentSystem->getMask());

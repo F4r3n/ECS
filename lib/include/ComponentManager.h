@@ -48,6 +48,7 @@ public:
         return ((bits & compo)  == compo);
     }
     
+    
     void resetMask() {
         bits.reset();
     }
