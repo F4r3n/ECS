@@ -17,8 +17,12 @@ public:
         systems.push_back(std::move(system));
     }
     
+    std::unique_ptr<System>& operator[](unsigned int index) {
+        return systems[index];
+    }
+    
     void addSystem(unsigned int position, std::unique_ptr<System> &&system) {
-        systems.insert(systems.begin() + position, std::move(system));
+        systems[position] = std::move(system);
     }
 
     template <typename T> std::unique_ptr<T> getSystem(int index) {
