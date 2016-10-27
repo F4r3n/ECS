@@ -10,6 +10,8 @@ public:
     SystemManager(unsigned int numberSystems) {
         systems.resize(numberSystems);
     }
+    
+    SystemManager() {}
     ~SystemManager() {
     }
 
