@@ -19,8 +19,8 @@ public:
         systems.push_back(std::move(system));
     }
     
-    std::unique_ptr<System>& operator[](unsigned int index) {
-        return systems[index];
+    System* operator[](unsigned int index) {
+        return systems[index].get();
     }
     
     void addSystem(unsigned int position, std::unique_ptr<System> &&system) {
