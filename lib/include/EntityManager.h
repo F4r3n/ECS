@@ -25,6 +25,15 @@ public:
     inline bool checkID(size_t ID) const {
         return ID == MAX_ID;
     }
+    
+    template <typename T> bool removeComponent(size_t ID) {
+         if(checkID(ID))
+            return false;
+        if(entitiesComponents[ID] != nullptr) {
+            return entitiesComponents[ID]->remove<T>();
+        }
+        return false;
+    }
 
     template <typename T> T* addComponent(size_t ID, Component<T>* c) {
         if(checkID(ID))

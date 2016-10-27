@@ -59,3 +59,11 @@ TEST_F(ComponentTest, iterate) {
     }
     ASSERT_EQ(index, 2);
 }
+
+TEST_F(ComponentTest, remove) {
+   e1->addComponent<Data>();
+   ASSERT_EQ(e1->has<Data>(), true);
+   
+   e1->remove<Data>();
+   ASSERT_EQ(e1->has<Data>(), false);
+}

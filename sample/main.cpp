@@ -134,8 +134,9 @@ int main() {
     }
     
     EntityManager::get().make();
-    systemManager.addSystem(std::make_unique<Movement>());
-    systemManager.addSystem(std::make_unique<ScriptSystem>());
+    systemManager.addSystem(0, std::make_shared<Movement>());
+    systemManager.addSystem(1,std::make_shared<Movement>());
+    systemManager.getSystem(0)->init(EntityManager::get(), EventManager::get());
     systemManager.init(EntityManager::get(), EventManager::get());
   
   //Test 1000 iterations

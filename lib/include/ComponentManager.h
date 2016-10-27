@@ -48,6 +48,13 @@ public:
         return ((bits & compo)  == compo);
     }
     
+    template <typename T>
+    bool remove() {
+        
+        bits.set(T::id(), 0);
+        components[T::id()].reset();
+        return true;
+    }
     
     void resetMask() {
         bits.reset();
