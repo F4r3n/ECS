@@ -15,6 +15,8 @@ public:
     }
 };
 
+
+
 class Data : public Component<Data> {
 public:
     Data() {
@@ -60,13 +62,13 @@ struct Collision2 {
 };
 
 
-class Movement : public System {
+class Movement : public System<Movement> {
 public:
     Movement() {
     }
     void update(float dt, EntityManager &em, EventManager &event) {
         for(auto e : em.iterate<Position>()) {
-          
+           std::cout << e->ID << std::endl;
         }
        // std::cout << "Called m" << std::endl;
         //std::cout << e->get<Position>()->x << std::endl;
@@ -88,14 +90,14 @@ public:
     }
 };
 
-class ScriptSystem : public System, public Receiver<ScriptSystem>{
+class ScriptSystem : public System<ScriptSystem>, public Receiver<ScriptSystem>{
 public:
     ScriptSystem() {
-        addComponent<Data>();
+        
     }
     void update(float dt, EntityManager &em, EventManager &event) {
        for(auto e : em.iterate<Data>()) {
-          
+         
         }
     }
     void pre_update( EntityManager &em) {
@@ -126,19 +128,20 @@ public:
 
 int main() {
     
-    SystemManager systemManager(2);
-    for(int i = 0; i < 1000; ++i) {
-        Entity* e = EntityManager::get().createEntity();
-        e->addComponent<Position>();
-        e->addComponent<Data>();
-    }
+    SystemManager systemManager(0);
+
+    Entity* e = EntityManager::get().createEntity();
+    e->addComponent<Position>();
+    e->addComponent<Data>();
+
     
     EntityManager::get().make();
-    systemManager.addSystem(0, std::make_shared<Movement>());
-    systemManager.addSystem(1,std::make_shared<Movement>());
-    systemManager.getSystem(0)->init(EntityManager::get(), EventManager::get());
+    systemManager.addSystem<Movement>(new Movement());
+   
+    Movement * m = systemManager.getSystem<Movement>();
     systemManager.init(EntityManager::get(), EventManager::get());
-  
+    
+
   //Test 1000 iterations
     for(int i = 0; i < 1000; ++i){
         std::cout << "Itreation " << i << std::endl;

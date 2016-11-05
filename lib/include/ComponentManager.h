@@ -18,7 +18,7 @@ public:
 
     template <typename T> T* getComponent()
     {
-        if(components.find(T::id()) == components.end()) {
+        if(!has<T>()) {
             return nullptr;
         }
         return dynamic_cast<T*>(components[T::id()].get());
@@ -28,8 +28,6 @@ public:
     {
         bits.set(T::id(), 1);
         components[T::id()].reset(c);
-        //std::cout <<"Component "<< dynamic_cast<T*>(components[T::id()].get()) << std::endl;
-
         return dynamic_cast<T*>(components[T::id()].get());
     }
 

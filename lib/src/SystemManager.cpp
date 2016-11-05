@@ -1,6 +1,6 @@
 #include "SystemManager.h"
 #include "EntityManager.h"
-System* currentSystem = nullptr;
+
 float currentTime = 0;
 
 void call_back_init(Entity* e) {
@@ -13,25 +13,22 @@ void call_back_update(Entity* e) {
 
 void SystemManager::init(EntityManager& em, EventManager &event) {
     EntityManager::get().make();
-    for(auto s : systems) {
-        if(!s) continue;
+    for(auto &s : systems) {
         //currentSystem = s.get();
         //em.getEntitiesWithComponents(&call_back_init, currentSystem->getMask());
-        s->init(em, event);
+        s.second->init(em, event);
     }
     em.make();
 }
 
 void SystemManager::update(float dt, EntityManager& em, EventManager &event) {
     currentTime = dt;
-    for(auto s : systems) {
-        if(!s) continue;
+    for(auto &s : systems) {
+        
 
-        s->pre_update(em);
-        //currentSystem = s.get();
-        //em.getEntitiesWithComponents(&call_back_update, currentSystem->getMask());
-        s->update(dt, em, event);
-        s->over();
+        s.second->pre_update(em);
+        s.second->update(dt, em, event);
+        s.second->over();
         em.make();
     }
 }

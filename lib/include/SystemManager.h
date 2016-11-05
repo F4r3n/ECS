@@ -8,37 +8,30 @@
 class SystemManager {
 public:
     SystemManager(unsigned int numberSystems) {
-        systems.resize(numberSystems);
+        
     }
     
     SystemManager() {}
     ~SystemManager() {
     }
 
-    void addSystem(std::shared_ptr<System> system) {
-        systems.push_back(system);
+template <typename T> 
+    T* addSystem(System<T> *system) {
+        systems[T::id()].reset(system);
+        return dynamic_cast<T*>(systems[T::id()].get());
     }
     
-    std::shared_ptr<System> getSystem(unsigned int index) {
-          if(index >= systems.size())
-            return nullptr;
-        return systems[index]; 
+    template <typename T>
+    T* getSystem() {
+        if(systems.find(T::id()) == systems.end()) return nullptr;
+        return dynamic_cast<T*>(systems[T::id()].get()); 
     }
     
-    void addSystem(unsigned int position, std::shared_ptr<System> system) {
-        systems[position] = system;
-    }
-
-    template <typename T> std::shared_ptr<T> get(unsigned int index) {
-        if(index >= systems.size())
-            return nullptr;
-        return std::dynamic_pointer_cast<T>(systems[index]);
-    }
 
     void update(float dt, EntityManager& em, EventManager &event);
     void init(EntityManager& em, EventManager &event);
     //void call_back(Entity *e);
 
 private:
-    std::vector<std::shared_ptr<System> > systems;
+    std::unordered_map<size_t, std::unique_ptr<BaseSystem> > systems;
 };
