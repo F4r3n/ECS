@@ -23,6 +23,10 @@ public:
     {
        return EntityManager::get().addComponent<T>(this, c);
     }
+    template <typename T> T* add()
+    {
+       return EntityManager::get().addComponent<T>(this, new T());
+    }
 
     template <typename T> T* get()
     {

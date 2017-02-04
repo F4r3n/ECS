@@ -111,7 +111,7 @@ class EntityIterator : public std::iterator<std::input_iterator_tag, size_t> {
         void next() {
             
             while(!valid() && currentIndex < capacity) {
-                currentIndex++;
+                ++currentIndex;
             }
         }
         
