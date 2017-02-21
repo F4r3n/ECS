@@ -77,9 +77,10 @@ public:
         if(checkID(id)) return nullptr;
         return entities_alive[id].get();
     }
-class EntityIterator : public std::iterator<std::input_iterator_tag, size_t> {
+    
+class EntityIteratorMask : public std::iterator<std::input_iterator_tag, size_t> {
     public:
-        EntityIterator(const Mask& mask, const size_t capacity, const size_t index) {
+        EntityIteratorMask(const Mask& mask, const size_t capacity, const size_t index) {
             this->mask = mask;
             this->capacity = capacity;
             this->currentIndex = index;
@@ -90,21 +91,21 @@ class EntityIterator : public std::iterator<std::input_iterator_tag, size_t> {
            return EntityManager::get().getEntity(currentIndex);
        }
       
-        EntityIterator operator++() {
+        EntityIteratorMask operator++() {
             currentIndex++;
             next();
-            return EntityIterator(mask, capacity, currentIndex);
+            return EntityIteratorMask(mask, capacity, currentIndex);
         }
         
-         EntityIterator begin(){
-             return EntityIterator(mask, capacity, 0);
+         EntityIteratorMask begin(){
+             return EntityIteratorMask(mask, capacity, 0);
         }
         
-         EntityIterator end() {
-             return EntityIterator(mask, capacity, capacity);
+         EntityIteratorMask end() {
+             return EntityIteratorMask(mask, capacity, capacity);
         }
         
-        bool operator!=(EntityIterator &i) {
+        bool operator!=(EntityIteratorMask &i) {
             return i.currentIndex != currentIndex;
         }
         
@@ -129,6 +130,55 @@ class EntityIterator : public std::iterator<std::input_iterator_tag, size_t> {
         size_t capacity;
     };
     
+class EntityIterator : public std::iterator<std::input_iterator_tag, size_t> {
+    public:
+        EntityIterator(EntityManager &parent, const size_t capacity, const size_t index): parent(parent) {
+            this->capacity = capacity;
+            this->currentIndex = index;
+            next();
+        }
+       
+       Entity* operator*() {
+           return parent.getEntity(currentIndex);
+       }
+      
+        EntityIterator operator++() {
+            currentIndex++;
+            next();
+            return EntityIterator(parent, capacity, currentIndex);
+        }
+        
+         EntityIterator begin(){
+             return EntityIterator(parent, capacity, 0);
+        }
+        
+         EntityIterator end() {
+             return EntityIterator(parent, capacity, capacity);
+        }
+        
+        bool operator!=(EntityIterator &i) {
+            return i.currentIndex != currentIndex;
+        }
+        
+        void next() {
+            
+            while(!valid() && currentIndex < capacity) {
+                ++currentIndex;
+            }
+        }
+        
+        inline bool valid() const{
+            return parent.isExists(currentIndex);
+        }
+        
+       
+   
+
+    private:
+        size_t currentIndex;
+        size_t capacity;
+        EntityManager& parent;
+    };
      template <typename T>
     Mask createMask() {
         Mask mask;
@@ -142,16 +192,20 @@ class EntityIterator : public std::iterator<std::input_iterator_tag, size_t> {
     }
     
     template <typename ...Args>
-    EntityIterator iterate() {
-        EntityIterator iterator(createMask<Args...>(), posIndex, 0);
+    EntityIteratorMask iterate() {
+        EntityIteratorMask iterator(createMask<Args...>(), posIndex, 0);
         return iterator;
     }
     
-    EntityIterator iterate(const Mask &mask) {
-        EntityIterator iterator(mask, posIndex, 0);
+    EntityIteratorMask iterate(const Mask &mask) {
+        EntityIteratorMask iterator(mask, posIndex, 0);
         return iterator;
     }
 
+    EntityIterator simpleIterate() {
+        EntityIterator iterator(*this, posIndex, 0);
+        return iterator;
+    }
 private:
     void destroyEntity(size_t id, bool isActive);
 

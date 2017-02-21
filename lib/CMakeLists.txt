@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.8.11)
 project (ECS CXX)
 include(CheckCXXCompilerFlag)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14 -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14 -O2")
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
   # using Clang
