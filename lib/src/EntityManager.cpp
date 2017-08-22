@@ -23,7 +23,7 @@ void EntityManager::killAll() {
             if(!checkID(e->ID) && entitiesComponents[e->ID]) {
                 entitiesComponents[e->ID].reset();
             }
-            e.reset();
+            delete e;
         }
     }
 
@@ -60,14 +60,14 @@ Entity* EntityManager::createEntity() {
     if(entities_killed.empty()) {
         posIndex++;
         capacity++;
-        std::unique_ptr<Entity> entity = std::make_unique<Entity>(free_id.back());
+        Entity* entity = new Entity(free_id.back());
        
         entity->allocated = true;
 
         temp_entities.push_back(std::move(entity));
         free_id.pop_back();
         
-        return temp_entities.back().get();
+        return temp_entities.back();
 
     } else {
         capacity++;
@@ -76,7 +76,7 @@ Entity* EntityManager::createEntity() {
         entities_killed.pop_back();
         entities_alive[id]->active = true;
         entities_alive[id]->ID = id;
-        return entities_alive[id].get();
+        return entities_alive[id];
     }
     return nullptr;
 }
@@ -84,7 +84,7 @@ Entity* EntityManager::createEntity() {
 void EntityManager::getEntities(std::function<void(Entity*)> func) {
     for(pEntity& e : entities_alive)
         if(isExists(e->ID))
-            func(e.get());
+            func(e);
 }
 
 void EntityManager::getEntitiesWithComponents(std::function<void(Entity*)> func, std::bitset<MAX_COMPONENTS>& bits) {
@@ -93,8 +93,8 @@ void EntityManager::getEntitiesWithComponents(std::function<void(Entity*)> func,
         if(!e)
             continue;
 
-        if(isExists(e.get()->ID) && hasComponents(e.get(), bits)) {
-            func(e.get());
+        if(isExists(e->ID) && hasComponents(e, bits)) {
+            func(e);
         }
     }
 }

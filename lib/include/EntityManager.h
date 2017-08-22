@@ -6,7 +6,7 @@
 #define POOL_SIZE 1000000
 
 class Entity;
-typedef std::unique_ptr<Entity> pEntity;
+typedef Entity* pEntity;
 typedef std::bitset<MAX_COMPONENTS> Mask;
 class EntityManager {
 public:
@@ -73,9 +73,12 @@ public:
         if(checkID(id)) return false;
         return entitiesComponents[id]->has<T>();
     }
-    inline Entity* getEntity(size_t id) {
+    inline Entity* getEntity(const size_t id) {
         if(checkID(id)) return nullptr;
-        return entities_alive[id].get();
+        return entities_alive[id];
+    }
+    inline Entity* getEntityNotSafe(const size_t id) {
+        return entities_alive[id];
     }
     
 class EntityIteratorMask : public std::iterator<std::input_iterator_tag, size_t> {
@@ -139,7 +142,7 @@ class EntityIterator : public std::iterator<std::input_iterator_tag, size_t> {
         }
        
        Entity* operator*() {
-           return parent.getEntity(currentIndex);
+           return parent.getEntityNotSafe(currentIndex);
        }
       
         EntityIterator operator++() {
@@ -162,18 +165,12 @@ class EntityIterator : public std::iterator<std::input_iterator_tag, size_t> {
         
         void next() {
             
-            while(!valid() && currentIndex < capacity) {
+            while(!parent.isExists(currentIndex) && currentIndex < capacity) {
                 ++currentIndex;
             }
         }
         
-        inline bool valid() const{
-            return parent.isExists(currentIndex);
-        }
-        
-       
-   
-
+         
     private:
         size_t currentIndex;
         size_t capacity;

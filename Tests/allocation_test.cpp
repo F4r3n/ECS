@@ -14,7 +14,7 @@ public:
     
     void TearDown() {
         
-        //EntityManager::get().killAll();
+        EntityManager::get().killAll();
     }
    
 };
@@ -41,3 +41,15 @@ TEST_F(AllocTest, SecondAlloc) {
 
 
 
+TEST_F(AllocTest, AllocDestroy) {
+
+    for(int i = 0; i < size/2; ++i) {
+        entities[i]->destroy();
+    }
+    for(int i = 0; i < size/2; ++i) {
+       entities.push_back(EntityManager::get().createEntity());
+    }
+    for(int i = 0; i < size/2; ++i) {
+        entities[i]->destroy();
+    }
+}
