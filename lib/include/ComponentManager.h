@@ -6,14 +6,14 @@
 #include <unordered_map>
 #include <typeinfo>
 #include <array>
-#include <iostream>
 #include <bitset>
 #include "Config.h"
 
 class ComponentManager
 {
     public:
-        ComponentManager() {}
+        explicit ComponentManager(size_t ID) {_bits.reset(); currentEntityID = ID;}
+        ComponentManager() = delete;
         ~ComponentManager() {
             removeAll();
         }
@@ -26,18 +26,32 @@ class ComponentManager
             return dynamic_cast<T*>(_components[T::id()]);
         }
 
-        template <typename T> T* addComponent(Component<T> *c)
+        template <typename T> T* add(Component<T> *c)
         {
             _bits.set(T::id(), 1);
+            c->_IDEntity = currentEntityID;
             _components[T::id()] = std::move(c);
+
+            return dynamic_cast<T*>(_components[T::id()]);
+        }
+
+        template <typename T, typename... Args> T* addComponent(Args&&... args)
+        {
+            _bits.set(T::id(), 1);
+            Component<T>* c = new T(std::forward<Args>(args)...);
+            c->_IDEntity = currentEntityID;
+
+            _components[T::id()] = std::move(c);
+
             return dynamic_cast<T*>(_components[T::id()]);
         }
 
         template <typename T>
-            bool has()
-            {
-                return _bits.test(T::id());
-            }
+        bool has()
+        {
+            return _bits.test(T::id());
+        }
+
         bool has(size_t id)
         {
             return _bits.test(id);
@@ -73,16 +87,18 @@ class ComponentManager
 
         std::vector<BaseComponent*> getAllComponents() {
             std::vector<BaseComponent*> temp;
-            for(auto &c : _components) {
-                temp.push_back(c.second);
+            for(int i = 0; i < MAX_COMPONENTS; ++i) {
+                if(_bits.test(i)) {
+                    temp.push_back(_components[i]);
+                }
             }
             return temp;
         }
 
-
+        size_t currentEntityID = std::numeric_limits<size_t>::max();
     private:
         std::bitset<MAX_COMPONENTS> _bits;
-        std::unordered_map<size_t, BaseComponent* > _components;
+        BaseComponent* _components[MAX_COMPONENTS];
 };
 
 #endif

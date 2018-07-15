@@ -7,7 +7,7 @@
 
 #include "EntityManager.h"
 #include "Component.h"
-#include "Serializer.hpp"
+
 class Entity
 {
 
@@ -15,17 +15,28 @@ public:
     Entity();
     Entity(size_t ID);
     ~Entity();
-    size_t ID;
+    size_t ID = std::numeric_limits<size_t>::max();
     bool active = false;
     bool toCreate = true;
     bool allocated = false;
-    template <typename T> T* addComponent(Component<T> *c = new T())
+
+
+    template <typename T, typename ...Args> T* addComponent(Args&&... args)
     {
-       return EntityManager::get().addComponent<T>(this, c);
+       return EntityManager::get().addComponent<T>(this, args...);
     }
     template <typename T> T* add()
     {
-       return EntityManager::get().addComponent<T>(this, new T());
+       return EntityManager::get().add<T>(this, new T());
+    }
+
+    template <typename T> T* addEmpty()
+    {
+       return EntityManager::get().add<T>(this, new T());
+    }
+    template <typename T> T* add(Component<T> *c)
+    {
+       return EntityManager::get().add<T>(this, c);
     }
 
     template <typename T> T* get()
@@ -48,15 +59,7 @@ public:
     }
     
     void destroy();
-    void serialize() {
-        Serializer serializer;
-        serializer.write("IDEntity", ID);
-        std::vector<BaseComponent*> compos = getAllComponents();
-        for(BaseComponent* compo : compos) {
-            compo->serialize(serializer);
-        }
-        serializer.writeToFile(std::to_string(ID) + ".json");
-    }
+
 private:
 };
 
