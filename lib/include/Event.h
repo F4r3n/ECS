@@ -192,7 +192,7 @@ class EventManager {
     return size;
   }
   
-  static EventManager& get() {
+  inline static EventManager& Get() {
       return _instance;
   }
 

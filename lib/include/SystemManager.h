@@ -1,37 +1,36 @@
 #pragma once
 #include "System.h"
 #include <memory>
-#include <typeinfo>
-#include <cassert>
-#include "EntityManager.h"
-#include "Event.h"
-class SystemManager {
+#include <vector>
+typedef std::vector<std::unique_ptr<BaseSystem> > MapOfSystems;
+
+enum SYSTEM_MANAGER_MODE
+{
+	START = 1,
+	STOP = 2
+};
+
+class SystemManager
+{
 public:
-    SystemManager(unsigned int numberSystems) {
-        
-    }
     
-    SystemManager() {}
-    ~SystemManager() {
-    }
+	SystemManager();
+    ~SystemManager() {}
 
 template <typename T> 
-    T* addSystem(System<T> *system) {
-        systems[T::id()].reset(system);
-        return dynamic_cast<T*>(systems[T::id()].get());
-    }
-    
-    template <typename T>
-    T* getSystem() {
-        if(systems.find(T::id()) == systems.end()) return nullptr;
-        return dynamic_cast<T*>(systems[T::id()].get()); 
+    void addSystem(System<T> *system) 
+	{
+		systems.emplace_back(system);
     }
     
 
     void update(float dt, EntityManager& em, EventManager &event);
-    void init(EntityManager& em, EventManager &event);
+	void init(EntityManager& em, EventManager &inEvent);
     void Free();
+	void Stop();
+	void Start();
 
 private:
-    std::unordered_map<size_t, std::unique_ptr<BaseSystem> > systems;
+	MapOfSystems systems;
+	SYSTEM_MANAGER_MODE _mode;
 };

@@ -1,13 +1,11 @@
 #include "Entity.h"
-
+#include "EntityManager.h"
 Entity::Entity() {
-    ID = std::numeric_limits<size_t>::max();
+    ID = std::numeric_limits<id>::max();
     active = false;
-    toCreate = true;
-    allocated = false;
 }
 
-Entity::Entity(size_t ID) {
+Entity::Entity(id ID) {
     this->ID = ID;
 }
 
@@ -20,3 +18,7 @@ void Entity::destroy() {
     EntityManager::get().deleteEntity(this);
 }
 
+std::vector<BaseComponent*> Entity::getAllComponents() 
+{
+	return EntityManager::get().getAllComponents(this);
+}
