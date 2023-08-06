@@ -2,6 +2,7 @@
 #define SYSTEM_H
 #include <cstddef>
 #include "Config.h"
+
 class EventManager;
 class ComponentManager;
 class Entity;

@@ -4,11 +4,12 @@
 #include <vector>
 typedef std::vector<std::unique_ptr<BaseSystem> > MapOfSystems;
 
-enum SYSTEM_MANAGER_MODE
+enum class SYSTEM_MANAGER_MODE
 {
-	START = 1,
-	STOP = 2
+	RUNNING,
+	STOPPED
 };
+
 
 class SystemManager
 {
@@ -29,8 +30,11 @@ template <typename T>
     void Free();
 	void Stop();
 	void Start();
-
+	inline SYSTEM_MANAGER_MODE GetStatus() const { return _mode; }
 private:
+	bool ShouldCallSystem(SYSTEM_MODE inSystemMode) const;
+
+
 	MapOfSystems systems;
 	SYSTEM_MANAGER_MODE _mode;
 };
