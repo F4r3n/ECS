@@ -19,14 +19,7 @@ public:
 	~Position() {
 	}
 
-	bool Serialize(nlohmann::json& ioJson) const
-	{
-		return false;
-	}
-	bool Read(const nlohmann::json& inJSON)
-	{
-		return false;
-	}
+
 	void Destroy() {
 
 	}

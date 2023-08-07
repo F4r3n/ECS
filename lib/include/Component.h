@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <cstddef>
-#include <nlohmann/json_fwd.hpp>
 #include "Config.h"
 #include <limits>
 
@@ -13,8 +12,6 @@ public:
 	friend class ComponentManager;
     BaseComponent();
     const std::string& GetName() const {return _name;}
-    virtual bool Serialize(nlohmann::json &ioJson) const = 0;
-    virtual bool Read(const nlohmann::json &inJSON) = 0;
     virtual uint16_t GetType() const = 0;
     
 protected:
@@ -35,9 +32,6 @@ public:
 
         return i;
     }
-
-    virtual bool Serialize(nlohmann::json &ioJson) const = 0;
-    virtual bool Read(const nlohmann::json &inJSON) = 0;
 
     virtual uint16_t GetType() const
     {

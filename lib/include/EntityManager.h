@@ -4,6 +4,7 @@
 #include "ComponentManager.h"
 #include <functional>
 #include "EntityIteratorMask.h"
+#include <memory>
 #define ADD_SIZE 200
 
 class EntityManager 
