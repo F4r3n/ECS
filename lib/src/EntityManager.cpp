@@ -17,7 +17,6 @@ void EntityManager::_Init(uint32_t inSize)
 	}
 	_entity_version.resize(inSize + 1);
 	_entitiesComponents.resize(inSize + 1);
-	_capacity = 1;
 }
 
 
@@ -31,7 +30,6 @@ EntityManager::~EntityManager()
 
 void EntityManager::Free()
 {
-	_capacity = 0;
 	_entity_version.clear();
 	_entitiesComponents.clear();
 	_free_id.clear();
@@ -77,7 +75,6 @@ Entity EntityManager::createEntity() {
 	_free_id.pop_back();
 	//_entities_alive.push_back(e);
 	_entity_version[returnID] = 1;
-	_capacity++;
     
 	Entity entity(this, Entity::Id(returnID, _entity_version[returnID]));
 

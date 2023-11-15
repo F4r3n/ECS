@@ -103,12 +103,12 @@ public:
     
     template <typename ...Args>
     EntityIteratorMask iterate(std::function<bool(EntityManager& , const Entity::Id&)> inPredicate = {}) {
-        EntityIteratorMask iterator(createMask<Args...>(), 0, EntityManager::get()._capacity, inPredicate);
+        EntityIteratorMask iterator(createMask<Args...>(), 0, EntityManager::get()._entity_version.size(), inPredicate);
         return iterator;
     }
     
     EntityIteratorMask iterate(const Mask &mask, std::function<bool(EntityManager& , const Entity::Id&)> inPredicate = {}) {
-        EntityIteratorMask iterator(mask, 0, EntityManager::get()._capacity, inPredicate);
+        EntityIteratorMask iterator(mask, 0, EntityManager::get()._entity_version.size(), inPredicate);
         return iterator;
     }
 
@@ -119,10 +119,7 @@ private:
 
     std::vector<uint32_t> _free_id;
 	std::vector<uint32_t> _entity_version;
-    std::vector<std::unique_ptr<ComponentManager>> _entitiesComponents;
-
-    uint32_t _capacity = 0;
-    
+    std::vector<std::unique_ptr<ComponentManager>> _entitiesComponents;    
 };
 
 template <typename T, typename ...Args> T* Entity::addComponent(Args&&... args)
