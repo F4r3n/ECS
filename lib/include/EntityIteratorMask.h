@@ -7,7 +7,7 @@ class EntityManager;
 
 class EntityIteratorMask {
 public:
-	EntityIteratorMask(const Mask& mask, size_t inCursor, size_t inMax, std::function<bool(EntityManager&, const Entity::Id&)> inPredicate);
+	EntityIteratorMask(const Mask& mask, uint32_t inCursor, uint32_t inMax, std::function<bool(EntityManager&, const Entity::Id&)> inPredicate);
 
 	Entity operator*();
 
@@ -29,6 +29,6 @@ private:
 	EntityManager* _manager;
 	Mask _mask;
 	uint32_t _cursor;
-	size_t _max;
+	uint32_t _max;
 
 };

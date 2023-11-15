@@ -115,13 +115,13 @@ public:
     void Free();
 
 private:
-	void _Init(size_t inSize);
+	void _Init(uint32_t inSize);
 
     std::vector<uint32_t> _free_id;
 	std::vector<uint32_t> _entity_version;
     std::vector<std::unique_ptr<ComponentManager>> _entitiesComponents;
 
-    size_t _capacity = 0;
+    uint32_t _capacity = 0;
     
 };
 

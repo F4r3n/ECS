@@ -9,7 +9,7 @@ EntityManager::EntityManager() {
 	const uint32_t poolSize = 10;
 	_Init(poolSize);
 }
-void EntityManager::_Init(size_t inSize)
+void EntityManager::_Init(uint32_t inSize)
 {
 	for (uint32_t i = inSize; i >= 1; i--)
 	{
@@ -61,11 +61,11 @@ Entity EntityManager::createEntity() {
 	uint32_t returnID = 0;
     if(_free_id.empty())
     {
-		uint32_t firstValue = _entity_version.size();
-		uint32_t sizeFreeID = firstValue + ADD_SIZE;
+		size_t firstValue = _entity_version.size();
+		size_t sizeFreeID = firstValue + ADD_SIZE;
 
-        for(long i = sizeFreeID; i >= firstValue; i--) {
-            _free_id.push_back(i);
+        for(size_t i = sizeFreeID; i >= firstValue; i--) {
+            _free_id.push_back(static_cast<uint32_t>(i));
         }
 
 		_entity_version.resize(sizeFreeID + 1);

@@ -1,6 +1,6 @@
 #include "EntityIteratorMask.h"
 #include "EntityManager.h"
-EntityIteratorMask::EntityIteratorMask(const Mask& mask, size_t inCursor, size_t inMax, std::function<bool(EntityManager&, const Entity::Id&)> inPredicate) {
+EntityIteratorMask::EntityIteratorMask(const Mask& mask, uint32_t inCursor, uint32_t inMax, std::function<bool(EntityManager&, const Entity::Id&)> inPredicate) {
 	_mask = mask;
 	_cursor = inCursor;
 	_manager = &EntityManager::get();
