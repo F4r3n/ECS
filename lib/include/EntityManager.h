@@ -103,12 +103,12 @@ public:
     
     template <typename ...Args>
     EntityIteratorMask iterate(std::function<bool(EntityManager& , const Entity::Id&)> inPredicate = {}) {
-        EntityIteratorMask iterator(createMask<Args...>(), 0, EntityManager::get()._entity_version.size(), inPredicate);
+        EntityIteratorMask iterator(createMask<Args...>(), 0, static_cast<uint32_t>(EntityManager::get()._entity_version.size()), inPredicate);
         return iterator;
     }
     
     EntityIteratorMask iterate(const Mask &mask, std::function<bool(EntityManager& , const Entity::Id&)> inPredicate = {}) {
-        EntityIteratorMask iterator(mask, 0, EntityManager::get()._entity_version.size(), inPredicate);
+        EntityIteratorMask iterator(mask, 0, static_cast<uint32_t>(EntityManager::get()._entity_version.size()), inPredicate);
         return iterator;
     }
 
