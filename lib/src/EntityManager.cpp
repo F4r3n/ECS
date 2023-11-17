@@ -55,15 +55,16 @@ Entity EntityManager::GetEntity(Entity::Id inID)
 
 
 
-Entity EntityManager::createEntity() {
-	uint32_t returnID = 0;
+Entity EntityManager::createEntity()
+{
+
     if(_free_id.empty())
     {
-		size_t firstValue = _entity_version.size();
-		size_t sizeFreeID = firstValue + ADD_SIZE;
+		const uint32_t firstValue = static_cast<uint32_t>(_entity_version.size());
+		const uint32_t sizeFreeID = firstValue + ADD_SIZE;
 
-        for(size_t i = sizeFreeID; i >= firstValue; i--) {
-            _free_id.push_back(static_cast<uint32_t>(i));
+        for(uint32_t i = sizeFreeID; i >= firstValue; i--) {
+            _free_id.emplace_back(i);
         }
 
 		_entity_version.resize(sizeFreeID + 1);
@@ -71,16 +72,13 @@ Entity EntityManager::createEntity() {
     }
 
 
-	returnID = _free_id.back();
+	const uint32_t returnID = _free_id.back();
+	_entity_version[returnID] = 1;
+
 	_free_id.pop_back();
 	//_entities_alive.push_back(e);
-	_entity_version[returnID] = 1;
-    
-	Entity entity(this, Entity::Id(returnID, _entity_version[returnID]));
 
-    
-
-	return entity;
+	return Entity(this, Entity::Id(returnID, _entity_version[returnID]));
 }
 
 
@@ -100,7 +98,8 @@ bool EntityManager::hasComponents(const Entity& e, const std::vector<uint16_t>& 
 	return false;
 }
 
-bool EntityManager::hasComponents(const Entity::Id& id, const Mask& bits) const{
+bool EntityManager::hasComponents(const Entity::Id& id, const Mask& bits) const
+{
 
     if(_entitiesComponents[id.index()])
         return _entitiesComponents[id.index()]->has(bits);

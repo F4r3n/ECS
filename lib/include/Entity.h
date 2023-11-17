@@ -20,8 +20,8 @@ public:
 		bool operator != (const Id& other) const { return _id != other._id; }
 		bool operator < (const Id& other) const { return _id < other._id; }
 
-		uint32_t index() const { return _id & 0xffffffffUL; }
-		uint32_t version() const { return _id >> 32; }
+		inline uint32_t index() const { return _id & 0xffffffffUL; }
+		inline uint32_t version() const { return _id >> 32; }
 
 	private:
 		uint64_t _id;

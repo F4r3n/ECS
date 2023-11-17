@@ -5,7 +5,7 @@
 #include <functional>
 #include "EntityIteratorMask.h"
 #include <memory>
-#define ADD_SIZE 200
+#define ADD_SIZE 20
 
 class EntityManager 
 {
@@ -119,7 +119,7 @@ private:
 
     std::vector<uint32_t> _free_id;
 	std::vector<uint32_t> _entity_version;
-    std::vector<std::unique_ptr<ComponentManager>> _entitiesComponents;    
+    std::vector<std::unique_ptr<ComponentManager>> _entitiesComponents;
 };
 
 template <typename T, typename ...Args> T* Entity::addComponent(Args&&... args)
